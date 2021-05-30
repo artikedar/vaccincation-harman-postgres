@@ -1,0 +1,56 @@
+application:
+  id: harman-vaccination
+  environment: local
+  logType: Application
+  name: Harman vaccination drive
+  platformName: harmanvac
+  serviceName: harman-vaccination-services
+  version: 2.0
+maven:
+    basedir: '@project.basedir@'
+server:
+    port: 17002
+security:
+  user:
+    name: user
+    password: password
+spring:
+    data:
+        rest:
+            basePath: /harman/vaccination/v1
+            default-page-size:  50
+    datasource:
+        driverClassName: org.postgresql.Driver
+        password: HarmanV@#12
+        url: jdbc:postgresql://localhost:5432/harmanvac?currentSchema=covid&stringtype=unspecified
+        username: vacadmin
+    jpa:
+        hibernate:
+            naming:
+                implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+            ddl-auto: validate
+        properties:
+            hibernate:
+                format_sql: true
+                generate_statistics: true
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                show-sql: false
+        cache:
+            region:
+                factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+            use_query_cache: true
+            use_second_level_cache: true
+    show-sql: true
+    servlet:
+        multipart:
+            enabled: true
+            file-size-threshold: 2KB
+            max-file-size: 500MB
+            max-request-size: 500MB
+applicationmode: dev
+threadPool:
+  maxPoolSize: 5
+  corePoolSize: 5
+  queueCapacity: 50
+  awaitTerminationSec: 120

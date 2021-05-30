@@ -4,7 +4,7 @@ plugins {
 	id 'java'
 }
 
-group = 'com.harman'
+group = 'com.harman.ebook.vaccinatin.covid'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
@@ -14,12 +14,20 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	
+	compile 'org.springframework.data:spring-data-rest-hal-explorer:3.2.0.RELEASE'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	compileOnly 'org.projectlombok:lombok:1.18.20'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	
+	// https://mvnrepository.com/artifact/org.yaml/snakeyaml
+  implementation group: 'org.yaml', name: 'snakeyaml', version: '1.28'
+  compile group: 'org.springframework.data', name: 'spring-data-envers', version: '2.2.4.RELEASE'
 }
 
 test {

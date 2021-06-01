@@ -12,6 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@Data
 @MappedSuperclass
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @EntityListeners(AuditingEntityListener.class)
@@ -51,47 +53,5 @@ public abstract class BaseEntity implements Serializable {
 
 	  @Column(name = "isactive", nullable = false, updatable = true, insertable = false)
 	  private Boolean isactive;
-
-	public String getCreatedby() {
-		return createdby;
-	}
-
-	public void setCreatedby(String createdby) {
-		this.createdby = createdby;
-	}
-
-	public Date getCreatedOn() {
-		return createdOn;
-	}
-
-	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-	}
-
-	public String getModifiedby() {
-		return modifiedby;
-	}
-
-	public void setModifiedby(String modifiedby) {
-		this.modifiedby = modifiedby;
-	}
-
-	public Date getModifiedOn() {
-		return modifiedOn;
-	}
-
-	public void setModifiedOn(Date modifiedOn) {
-		this.modifiedOn = modifiedOn;
-	}
-
-	public Boolean getIsactive() {
-		return isactive;
-	}
-
-	public void setIsactive(Boolean isactive) {
-		this.isactive = isactive;
-	}
-	  
-	  
 
 }

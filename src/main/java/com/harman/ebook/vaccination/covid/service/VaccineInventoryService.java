@@ -1,5 +1,15 @@
 package com.harman.ebook.vaccination.covid.service;
 
+import static com.harman.ebook.vaccination.covid.constants.VaccinationConstants.DATE_FORMAT;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
 import com.harman.ebook.vaccination.covid.domain.Schedule;
 import com.harman.ebook.vaccination.covid.domain.VaccineInventorySchedule;
@@ -7,16 +17,6 @@ import com.harman.ebook.vaccination.covid.entity.VaccineInventory;
 import com.harman.ebook.vaccination.covid.repository.VaccineInventoryRepository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import static com.harman.ebook.vaccination.covid.constants.VaccinationConstants.DATE_FORMAT;
 
 @Service
 public class VaccineInventoryService {

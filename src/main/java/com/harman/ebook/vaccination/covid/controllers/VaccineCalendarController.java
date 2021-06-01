@@ -20,8 +20,6 @@ import java.util.List;
 @RequestMapping(value = "${spring.data.rest.basePath}", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class VaccineCalendarController {
-	@Autowired
-    private ApplicationResponseService appResponseService;
 
     @Autowired
     private VaccineCalendarService vaccineCalendarService;
@@ -34,9 +32,6 @@ public class VaccineCalendarController {
      */
     @GetMapping (value = "/api/vaccine/calendar/location/{location}")
     public GenericResponseEntity getVaccineCalendar(@RequestParam(name = "fromDate",required = true) String fromDate, @PathVariable(name = "location",required = true) Short location) throws ParseException {
-        List<VaccineCalendarVO> vaccineCalendarVOList = vaccineCalendarService.getVaccineCalendarVO(fromDate, location);
-        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, vaccineCalendarVOList);
+        return vaccineCalendarService.getVaccineCalendarVO(fromDate, location);
     }
-
-
 }

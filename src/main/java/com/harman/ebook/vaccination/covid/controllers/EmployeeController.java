@@ -47,12 +47,15 @@ public class EmployeeController {
 		EmployeeMaster emp=empService.findByEmployeeId(id);
 		return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS,emp); 
 	}
-	
-	 @GetMapping(value = "/api/employee/{empId}/dashboard")
-	    public GenericResponseEntity getEmployeeDashboard(@PathVariable(name = "empId",required = true)Integer empId) {
-	        //move this conversion to service
-	        List<EmployeeDashboardVO> employeeDashboard = empService.getEmployeeDashboard(empId);
-	        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, employeeDashboard);
-	    }
+
+	/**
+	 *
+	 * @param empId
+	 * @return list of person objects associated with empId
+	 */
+	@GetMapping(value = "/api/employee/{empId}/dashboard")
+	public GenericResponseEntity getEmployeeDashboard(@PathVariable(name = "empId",required = true)Integer empId) {
+		return empService.getEmployeeDashboard(empId);
+	}
 
 }

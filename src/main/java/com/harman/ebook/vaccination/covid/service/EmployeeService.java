@@ -3,6 +3,9 @@ package com.harman.ebook.vaccination.covid.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
+import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
+import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +22,10 @@ public class EmployeeService {
 	
 	@Autowired
 	PersonRespository personRepository;
-	
+
+    @Autowired
+    private ApplicationResponseService appResponseService;
+
 	public List<EmployeeMaster> getEmployee() {
 		return emprepos.findAll();
 	}
@@ -33,14 +39,14 @@ public class EmployeeService {
 			System.out.println("found entity: "+employeeRec);
 		return employeeRec;
 	}
-	
-	public List<EmployeeDashboardVO> getEmployeeDashboard(Integer empId) {
+
+    public GenericResponseEntity getEmployeeDashboard(Integer empId) {
         List<Person> person = personRepository.findPersonByEmpMasterId(empId);
         List<EmployeeDashboardVO> vo = getEmployeeDashboardVO(person);
-        return vo;
+        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, vo);
     }
-	
-	private List<EmployeeDashboardVO> getEmployeeDashboardVO(List<Person> personList) {
+
+    private List<EmployeeDashboardVO> getEmployeeDashboardVO(List<Person> personList) {
         List<EmployeeDashboardVO> voList = new ArrayList<>();
         for (Person person: personList)
         {
@@ -59,5 +65,4 @@ public class EmployeeService {
         };
         return voList;
     }
-
 }

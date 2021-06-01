@@ -1,8 +1,11 @@
 package com.harman.ebook.vaccination.covid.service;
 
+import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
 import com.harman.ebook.vaccination.covid.domain.VaccineCalendarVO;
 import com.harman.ebook.vaccination.covid.entity.VaccineInventory;
 import com.harman.ebook.vaccination.covid.repository.VaccineInventoryRepository;
+import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
+import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +18,28 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.harman.ebook.vaccination.covid.constants.VaccinationConstants.DATE_FORMAT;
+
 @Service
 public class VaccineCalendarService {
-	@Autowired
+    @Autowired
+    private ApplicationResponseService appResponseService;
+
+    @Autowired
     private VaccineInventoryRepository vaccineInventoryRepository;
 
-
-    public List<VaccineCalendarVO> getVaccineCalendarVO(String fromDateString, Short location) throws ParseException {
-        Date date1=new SimpleDateFormat("yyyy-dd-mm").parse(fromDateString);
-        Date tillDate = getNextDate(date1);
-        List<VaccineInventory> vaccineInventoryList = vaccineInventoryRepository.findByLocationAndAndDateOfAvailabilityBetween(location, date1, tillDate);
-        List<VaccineCalendarVO> voList = getVaccineCalendarVO(vaccineInventoryList);
-        return voList;
+    /**
+     *
+     * @param fromDateString
+     * @param location
+     * @return list of vaccine inventories available for the next 5 days starting from fromDateString
+     * @throws ParseException
+     */
+    public GenericResponseEntity getVaccineCalendarVO(String fromDateString, Short location) throws ParseException {
+        Date fromDate=new SimpleDateFormat(DATE_FORMAT).parse(fromDateString);
+        Date tillDate = getNextDate(fromDate);
+        List<VaccineInventory> vaccineInventoryList = vaccineInventoryRepository.findByLocationAndAndDateOfAvailabilityBetween(location, fromDate, tillDate);
+        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, getVaccineCalendarVO(vaccineInventoryList));
     }
 
     private List<VaccineCalendarVO> getVaccineCalendarVO(List<VaccineInventory> vaccineInventoryList) {

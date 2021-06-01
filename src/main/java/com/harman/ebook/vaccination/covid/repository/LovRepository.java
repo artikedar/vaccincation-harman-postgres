@@ -16,34 +16,31 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @created 5/30/2021
  */
 @RepositoryRestResource(collectionResourceRel = "lov", path = "lov")
-public interface LovRepository extends JpaRepository<Lov, Integer>{
-	@QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
-	  List<Lov> findBylovtypeid(@Param("lovtypeid") Short lovtypeid, Pageable page);
+public interface LovRepository extends JpaRepository<Lov, Integer>{@QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
+List<Lov> findBylovtypeid(@Param("lovtypeid") Short lovtypeid, Pageable page);
 
-	  @QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
-	  List<Lov> findBylovtypeidAndIsActive(@Param("lovtypeid") Short lovtypeid,
-	      @Param("isActive") Boolean isActive, Pageable page);
+@QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
+List<Lov> findBylovtypeidAndIsActive(@Param("lovtypeid") Short lovtypeid,
+    @Param("isActive") Boolean isActive, Pageable page);
 
-	  @QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
-	  @Query("SELECT l FROM Lov l WHERE l.lovtypeid = :lovtypeid AND l.isActive = :isActive")
-	  List<Lov> getLovByLovtypeIdIsActive(@Param("lovtypeid") Short lovtypeid,
-	      @Param("isActive") Boolean isActive);
-	  @QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
-	  Optional<Lov> findBylovtypeidAndValueAndIsActive(@Param("lovtypeid") Short lovtypeid,
-	      @Param("value") String value,
-	      @Param("isActive") Boolean isActive);
+@QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
+@Query("SELECT l FROM Lov l WHERE l.lovtypeid = :lovtypeid AND l.isActive = :isActive")
+List<Lov> getLovByLovtypeIdIsActive(@Param("lovtypeid") Short lovtypeid,
+    @Param("isActive") Boolean isActive);
+@QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
+Optional<Lov> findBylovtypeidAndValueAndIsActive(@Param("lovtypeid") Short lovtypeid,
+    @Param("value") String value,
+    @Param("isActive") Boolean isActive);
 
-	  @QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
-	  Optional<Lov> findBylovtypeidAndValueid(@Param("lovtypeid") Short lovtypeid,
-	      @Param("valueid") Integer valueid);
+@QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
+Optional<Lov> findBylovtypeidAndValueid(@Param("lovtypeid") Short lovtypeid,
+    @Param("valueid") Integer valueid);
 
-	  @QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
-	  Lov findBylovtypeidAndValue(@Param("lovtypeid") Short lovtypeid, @Param("value") String value);
+@QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
+Lov findBylovtypeidAndValue(@Param("lovtypeid") Short lovtypeid, @Param("value") String value);
 
-	  @QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
-	  Lov findBylovid(@Param("lovId") Integer lovId);
+@QueryHints(value = { @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
+Lov findBylovid(@Param("lovId") Integer lovId);
 
-	  @Query(value = "SELECT il FROM Lov il WHERE lower(il.value) NOT IN ('integer','float') and  il.lovtypeid= 10 and il.isActive=true")
-	  List<Lov> findOnBoardingDataTypes();
-
-}
+@Query(value = "SELECT il FROM Lov il WHERE lower(il.value) NOT IN ('integer','float') and  il.lovtypeid= 10 and il.isActive=true")
+List<Lov> findOnBoardingDataTypes();}

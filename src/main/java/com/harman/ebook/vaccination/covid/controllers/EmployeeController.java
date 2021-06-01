@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
+import com.harman.ebook.vaccination.covid.domain.EmployeeDashboardVO;
 import com.harman.ebook.vaccination.covid.entity.EmployeeMaster;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
@@ -46,5 +47,12 @@ public class EmployeeController {
 		EmployeeMaster emp=empService.findByEmployeeId(id);
 		return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS,emp); 
 	}
+	
+	 @GetMapping(value = "/api/employee/{empId}/dashboard")
+	    public GenericResponseEntity getEmployeeDashboard(@PathVariable(name = "empId",required = true)Integer empId) {
+	        //move this conversion to service
+	        List<EmployeeDashboardVO> employeeDashboard = empService.getEmployeeDashboard(empId);
+	        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, employeeDashboard);
+	    }
 
 }

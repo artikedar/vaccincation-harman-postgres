@@ -10,6 +10,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @created 5/30/2021
  */
 @RepositoryRestResource(collectionResourceRel = "lovtype", path = "lovtype")
-public interface LovTypeRepostiory extends JpaRepository<LovType, Integer> {
+public interface LovTypeRepostiory extends JpaRepository<LovType, Short> {
 
 }

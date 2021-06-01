@@ -33,15 +33,15 @@ spring:
         properties:
             hibernate:
                 format_sql: true
-                generate_statistics: true
+                generate_statistics: false
                 dialect: org.hibernate.dialect.PostgreSQLDialect
-                show-sql: false
+                show-sql: true
         cache:
             region:
                 factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
             use_query_cache: true
             use_second_level_cache: true
-    show-sql: true
+            show-sql: true
     servlet:
         multipart:
             enabled: true

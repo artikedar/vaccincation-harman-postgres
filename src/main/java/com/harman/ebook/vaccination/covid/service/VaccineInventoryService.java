@@ -11,6 +11,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,6 +27,7 @@ public class VaccineInventoryService {
     @Autowired
     private VaccineInventoryRepository vaccineInventoryRepository;
 
+    @Transactional
     public GenericResponseEntity insertIntoVaccineInventory(VaccineInventorySchedule vacInvSchedule) throws ParseException {
         VaccineInventory inventory = new VaccineInventory();
         inventory.setLocation(vacInvSchedule.getLocation());
@@ -36,7 +38,10 @@ public class VaccineInventoryService {
             inventory.setNoOfDoses(schedule.getNoOfDoses());
             inventory.setIsactive(Boolean.TRUE);
             vaccineInventoryRepository.save(inventory);
+            //take slots from lov, create object and set slotInfo Entity and save it.
         }
+
+        //saveAll
         return appResponseService.genSuccessResponse(VaccinationConstants.SAVED_RECORDS, vacInvSchedule.getSchedule().size());
     }
 }

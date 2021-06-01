@@ -11,4 +11,5 @@ import com.harman.ebook.vaccination.covid.entity.VaccineInventory;
 @RepositoryRestResource(collectionResourceRel = "vaccineInventory", path = "vaccine_inventory")
 public interface VaccineInventoryRepository extends JpaRepository<VaccineInventory, Integer>{
 	List<VaccineInventory> findByLocationAndAndDateOfAvailabilityBetween(Short location,Date date1,Date tillDate);
+	List<VaccineInventory> findVaccineInventoryByLocation(Short location);
 }

@@ -38,7 +38,8 @@ public class VaccineCalendarService {
     public GenericResponseEntity getVaccineCalendarVO(String fromDateString, Short location) throws ParseException {
         Date fromDate=new SimpleDateFormat(DATE_FORMAT).parse(fromDateString);
         Date tillDate = getNextDate(fromDate);
-        List<VaccineInventory> vaccineInventoryList = vaccineInventoryRepository.findByLocationAndAndDateOfAvailabilityBetween(location, fromDate, tillDate);
+//        List<VaccineInventory> vaccineInventoryList = vaccineInventoryRepository.findByLocationAndAndDateOfAvailabilityBetween(location, fromDate, tillDate);
+        List<VaccineInventory> vaccineInventoryList = vaccineInventoryRepository.findVaccineInventoryByLocation(location);
         return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, getVaccineCalendarVO(vaccineInventoryList));
     }
 

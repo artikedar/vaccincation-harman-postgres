@@ -7,6 +7,7 @@ import com.harman.ebook.vaccination.covid.entity.VaccineInventory;
 import com.harman.ebook.vaccination.covid.repository.VaccineInventoryRepository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ public class VaccineInventoryService {
             Schedule schedule = vacInvSchedule.getSchedule().get(i);
             inventory.setDateOfAvailability(new SimpleDateFormat(DATE_FORMAT).parse(schedule.getDate()));
             inventory.setNoOfDoses(schedule.getNoOfDoses());
+            inventory.setIsactive(Boolean.TRUE);
             vaccineInventoryRepository.save(inventory);
         }
         return appResponseService.genSuccessResponse(VaccinationConstants.SAVED_RECORDS, vacInvSchedule.getSchedule().size());

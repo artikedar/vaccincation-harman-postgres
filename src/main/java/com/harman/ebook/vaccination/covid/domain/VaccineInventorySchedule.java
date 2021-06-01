@@ -24,36 +24,4 @@ public class VaccineInventorySchedule {
     @JsonProperty("schedule")
     private List<Schedule> schedule;
 
-    public VaccineInventorySchedule() {
-    }
-
-    public VaccineInventorySchedule(Short vacType, Short location, List<Schedule> schedule) {
-        this.vacType = vacType;
-        this.location = location;
-        this.schedule = schedule;
-    }
-
-    public Short getVacType() {
-        return vacType;
-    }
-
-    public void setVacType(Short vacType) {
-        this.vacType = vacType;
-    }
-
-    public Short getLocation() {
-        return location;
-    }
-
-    public void setLocation(Short location) {
-        this.location = location;
-    }
-
-    public List<Schedule> getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(List<Schedule> schedule) {
-        this.schedule = schedule;
-    }
 }

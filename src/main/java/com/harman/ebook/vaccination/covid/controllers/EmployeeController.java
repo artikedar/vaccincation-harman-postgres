@@ -55,7 +55,7 @@ public class EmployeeController {
 	 */
 	@GetMapping(value = "/api/employee/{empId}/dashboard")
 	public GenericResponseEntity getEmployeeDashboard(@PathVariable(name = "empId",required = true)Integer empId) {
-		return empService.getEmployeeDashboard(empId);
+		return empService.getEmployeeDashboardResponse(empId);
 	}
 
 }

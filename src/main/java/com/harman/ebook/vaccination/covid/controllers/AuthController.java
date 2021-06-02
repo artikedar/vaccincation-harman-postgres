@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
@@ -33,22 +34,10 @@ public class AuthController {
 	@Autowired
 	AuthService authService;
 	
-	@GetMapping("/api/auth/{empId}/signin/{doj}")
+	@GetMapping("/api/auth/employee/{empId}")
 	public GenericResponseEntity validateSignIn (
 			@PathVariable (name="empId",required = true)Integer empId,
-			@PathVariable (name="doj",required = true) String doj)throws Exception {
-		GenericResponseEntity response=null;
-		EmployeeMaster empInfo=authService.validateUser(empId,doj);
-		if(null != empInfo) {
-			HashMap<String,Integer> empMap = new LinkedHashMap<String,Integer>();
-			empMap.put("empMasterId", empInfo.getEmpMasterId());
-			response = appResponseService.genSuccessResponse(VaccinationConstants.VALID_USER,empMap);
-		}else {
-			response = appResponseService.genFailureResponse(VaccinationConstants.INVALID_USER, null);
-		}
-		
-		return response;
+			@RequestParam(name="doj",required = true) String doj)throws Exception {
+		return  authService.validateUser(empId,doj);
 	}
-	
-
 }

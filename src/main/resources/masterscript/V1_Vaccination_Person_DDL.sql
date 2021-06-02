@@ -27,7 +27,7 @@ CREATE TABLE covid.person
     location int2         NULL,
 
     empmasterid          int4        NOT NULL,
-    appointmentid		int4		 NULL,
+    appointmentid		   int4		 NULL,
     createdon         timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     createdby         varchar(255) NULL,
     modifiedon        timestamp NULL DEFAULT CURRENT_TIMESTAMP,

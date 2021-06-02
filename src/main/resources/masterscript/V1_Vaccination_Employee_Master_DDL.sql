@@ -13,6 +13,7 @@ CREATE TABLE covid.employee_master
 (
     empmasterid       int4        NOT NULL DEFAULT nextval('covid.employee_master_seq'::regclass),
     empid             int4        NOT NULL,
+    fullname          varchar(255) NOT NULL,
     dateOfJoining     timestamp   NOT NULL,
     grade             varchar(25) NOT NULL,
     workplaceLocation varchar(25) NOT NULL,
@@ -38,6 +39,7 @@ CREATE TABLE covid.employee_master_aud
 
     empmasterid       int4 NOT NULL,
     empid             int4 NULL,
+    fullname          varchar(255)  NULL,
     dateOfJoining     timestamp NULL,
     grade             varchar(25) NULL,
     workplaceLocation varchar(25) NULL,

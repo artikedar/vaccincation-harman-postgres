@@ -55,4 +55,6 @@ public class EmployeeMaster extends BaseEntity {
 	  @Column(name="employmenttype")
 	  private Short employmenttype;
 
+		@Column(name="fullname")
+		private String fullname;
 }

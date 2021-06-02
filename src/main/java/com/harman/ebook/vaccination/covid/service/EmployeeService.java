@@ -35,11 +35,18 @@ public class EmployeeService {
 		return employeeRec;
 	}
 
-    public GenericResponseEntity getEmployeeDashboard(Integer empId) {
-        List<Person> person = personRepository.findPersonByEmpMasterId(empId);
-        List<EmployeeDashboardVO> vo = getEmployeeDashboardVO(person);
-        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, vo);
-    }
+
+
+
+  public GenericResponseEntity getEmployeeDashboardResponse(Integer empId) {
+    List<EmployeeDashboardVO> vo = getEmployeeDashboard(empId);
+    return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, vo);
+  }
+
+  public  List<EmployeeDashboardVO> getEmployeeDashboard(Integer empId) {
+    List<Person> person = personRepository.findPersonByEmpMasterId(empId);
+    return getEmployeeDashboardVO(person);
+  }
 
     private List<EmployeeDashboardVO> getEmployeeDashboardVO(List<Person> personList) {
         List<EmployeeDashboardVO> voList = new ArrayList<>();

@@ -43,7 +43,7 @@ public class SlotInfo extends BaseEntity {
     @Column(name = "noOfAvailableDoses")
     private Short noOfAvailableDoses;
 
-	@Column(name = "vacInvId")
+	@Column(name = "vacinvid")
 	private Integer vacInvId;
 
 	@ManyToOne

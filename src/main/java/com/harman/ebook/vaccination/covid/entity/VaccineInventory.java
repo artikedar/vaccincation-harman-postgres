@@ -38,7 +38,7 @@ public class VaccineInventory extends BaseEntity {
 	  private Short vacType;
 
 	  @Column(name = "dateOfAvailability")
-	  @Temporal(TemporalType.TIMESTAMP)
+	  @Temporal(TemporalType.DATE)
 	  private Date dateOfAvailability;
 
 	  @Column(name = "noOfDoses")

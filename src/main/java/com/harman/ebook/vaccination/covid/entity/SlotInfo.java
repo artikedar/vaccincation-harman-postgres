@@ -1,12 +1,6 @@
 package com.harman.ebook.vaccination.covid.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -29,15 +23,31 @@ import lombok.ToString;
 @Table(name = "slot_info", schema = "covid")
 @SequenceGenerator(name = "slotInfoSeq", sequenceName = "slot_info_seq", schema = "covid", initialValue = 1, allocationSize = 1)
 public class SlotInfo extends BaseEntity {
-	@Id
-	  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "slotInfoSeq")
-	  @Column(name = "slotInfoId", nullable = false, updatable = false, insertable = false)
-	  private Integer slotInfoId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "slotInfoSeq")
+    @Column(name = "slotInfoId", nullable = false, updatable = false, insertable = false)
+    private Integer slotInfoId;
 
-	  @Column(name="location")
-	  private Short location;
+    @Column(name = "location")
+    private Short location;
 
-	  @Column(name="slotNo")
-	  private Short slotNo;
+    @Column(name = "slotNo")
+    private Short slotNo;
+
+    @Column(name = "noOfDoses")
+    private Short noOfDoses;
+
+    @Column(name = "noOfBookedDoses")
+    private Short noOfBookedDoses;
+
+    @Column(name = "noOfAvailableDoses")
+    private Short noOfAvailableDoses;
+
+	@Column(name = "vacInvId")
+	private Integer vacInvId;
+
+	@ManyToOne
+	@JoinColumn(name="vacInvId", referencedColumnName="vacInvId", updatable = false, insertable=false)
+	private VaccineInventory vaccineInventory;
 
 }

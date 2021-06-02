@@ -14,4 +14,6 @@ public interface VaccineInventoryRepository extends JpaRepository<VaccineInvento
 
 	@Query("select vacInv from VaccineInventory vacInv where vacInv.location = :location and vacInv.dateOfAvailability >= :fromDate and vacInv.dateOfAvailability <= :tillDate and vacInv.isactive = :isActive")
 	List<VaccineInventory> findByLocationAndDateOfAvailabilityBetweenAndIsActive(Short location,Date fromDate,Date tillDate, Boolean isActive);
+
+	VaccineInventory findVaccineInventoryByVacTypeAndLocationAndDateOfAvailability(Short vacType, Short location, Date dateOfAvailability);
 }

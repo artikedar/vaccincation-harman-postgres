@@ -14,7 +14,7 @@ CREATE TABLE covid.vaccine_inventory
 (
     vacInvId       int4        NOT NULL DEFAULT nextval('covid.employee_vacc_sch_info_seq'::regclass),
     vacType    int2        NOT NULL,
-    dateOfAvailability     timestamp   NOT NULL,
+    dateofavailability     DATE   NOT NULL,
     noOfDoses   int2        NOT NULL,
     location    int2        NOT NULL,
     createdon  timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -38,7 +38,7 @@ CREATE TABLE covid.vaccine_inventory_aud
 
     vacInvId       int4         NULL DEFAULT nextval('covid.vaccine_inventory_seq'::regclass),
     vacType    int2         NULL,
-    dateOfAvailability     timestamp    NULL,
+    dateofavailability     date    NULL,
     noOfDoses   int2         NULL,
     location    int2         NULL,
     rev               int4 NULL,

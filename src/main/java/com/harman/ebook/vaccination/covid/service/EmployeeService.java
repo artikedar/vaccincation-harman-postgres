@@ -31,12 +31,7 @@ public class EmployeeService {
 	}
 	
 	public EmployeeMaster findByEmployeeId(Integer id) {
-		
 		EmployeeMaster employeeRec = emprepos.findByEmployeeId(id);
-		if(null == employeeRec)
-			System.out.println("null returned from db");
-		else
-			System.out.println("found entity: "+employeeRec);
 		return employeeRec;
 	}
 

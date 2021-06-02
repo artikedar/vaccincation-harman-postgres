@@ -23,5 +23,4 @@ public class VaccineInventorySchedule {
 
     @JsonProperty("schedule")
     private List<Schedule> schedule;
-
 }

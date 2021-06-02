@@ -45,3 +45,4 @@ public class EmployeeDashboardVO {
     @JsonProperty("empMasterId")
     private Integer empMasterId;
  }
+

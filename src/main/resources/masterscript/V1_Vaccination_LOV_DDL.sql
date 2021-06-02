@@ -37,6 +37,7 @@ INSERT INTO covid.lov_type(lovtypeid, name, displayname)VALUES (2, 'DoseNum', 'D
 INSERT INTO covid.lov_type(lovtypeid, name, displayname)VALUES (3, 'VacType', 'Vaccination Type');
 INSERT INTO covid.lov_type(lovtypeid, name, displayname)VALUES (4, 'VacSlots', 'Vaccination Slots');
 INSERT INTO covid.lov_type(lovtypeid, name, displayname)VALUES (5, 'EmpType', 'Employment Type');
+INSERT INTO covid.lov_type(lovtypeid, name, displayname)VALUES (6, 'AppointmentStatus', 'Appointment Status');
 
 /******************************************LOV VALUES*********************************************************/
 INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),1,1,1,'PUNE',true);
@@ -58,3 +59,8 @@ INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	V
 
 INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),5,1,1,'HR',true);
 INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),5,2,2,'Engineer',true);
+
+INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),6,1,1,'BOOKED',true);
+INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),6,2,2,'CANCELED',true);
+INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),6,3,3,'RESCHEDULED',true);
+INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),6,4,4,'COMPLETED',true);

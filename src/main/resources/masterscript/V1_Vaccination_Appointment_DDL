@@ -1,0 +1,51 @@
+DROP TABLE IF EXISTS covid.appointment;
+DROP SEQUENCE IF EXISTS covid.appointment_seq;
+CREATE SEQUENCE covid.appointment_seq
+    INCREMENT BY 1
+    MINVALUE 1
+    MAXVALUE 999999
+    START 1
+	CACHE 1
+	NO CYCLE;
+	
+CREATE TABLE covid.appointment
+(
+    appointmentid       int4        NOT NULL DEFAULT nextval('covid.appointment_seq'::regclass),
+    empmasterid         int4        NOT NULL,
+    location    		int2        NOT NULL,
+    bookingdate 		timestamp 	NOT NULL,
+    slotno    			int2        NOT NULL,
+	isactive			bool		NOT NULL DEFAULT true,
+	appointmentstatus 	int2		NOT null,
+    createdon         	timestamp 	NULL DEFAULT CURRENT_TIMESTAMP,
+    createdby         	varchar(255) NULL,
+    modifiedon        	timestamp 	NULL DEFAULT CURRENT_TIMESTAMP,
+    modifiedby        	varchar(255) null,
+    CONSTRAINT appointmentid_pk PRIMARY KEY (appointmentid)
+);
+grant all ON SEQUENCE covid.appointment_seq TO vacadmin;
+GRANT all ON table covid.appointment TO vacadmin;
+
+
+/*Audit*/
+DROP TABLE IF EXISTS covid.appointment_aud;
+
+CREATE TABLE covid.appointment_aud
+(
+
+    appointmentid       int4        NULL,
+    empmasterid         int4        NULL,
+    location    		int2        NULL,
+    bookingdate 		timestamp 	NULL,
+    slotno    			int2        NULL,
+	isactive			bool		NULL DEFAULT true,
+	appointmentstatus 	int2		NULL,
+    createdon         timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    createdby         varchar(255) NULL,
+    modifiedon        timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    modifiedby        varchar(255) NULL,
+	 rev               int4 NULL,
+    revtype           int2,
+    CONSTRAINT appointmentid_aud_pk PRIMARY KEY (appointmentid)
+);
+grant all ON table covid.appointment_aud TO vacadmin;

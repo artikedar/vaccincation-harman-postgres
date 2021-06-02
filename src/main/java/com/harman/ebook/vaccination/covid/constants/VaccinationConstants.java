@@ -20,5 +20,8 @@ public final class VaccinationConstants {
   public static final String VALID_USER="valid user";
   public static final String DATE_FORMAT = "yyyy-dd-mm";
   public static final String SAVED_RECORDS = "Successfully Saved Records";
+  public static final String INVALID_INPUT_ARGS_ALL_MANDATORY = "Invalid input arguments all mandatory fields";
+  public static final String APPOINTMENT_EXIST_ALREADY = "You can't create more than one appointment";
+  
 
 }

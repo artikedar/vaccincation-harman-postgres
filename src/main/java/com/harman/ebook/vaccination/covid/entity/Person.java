@@ -100,5 +100,9 @@ public class Person extends BaseEntity implements Serializable{
 	  @JoinColumn(name="empmasterid", referencedColumnName="empmasterid", updatable = false, insertable=false)
 	  private EmployeeMaster employeeMaster;
 	  
+	  @ManyToOne
+	  @JoinColumn(name="appointmentid", referencedColumnName="appointmentid", updatable = true, insertable=false)
+	  private Appointment appointment;
+	  
 
 }

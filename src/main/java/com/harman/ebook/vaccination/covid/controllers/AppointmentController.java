@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,16 +31,53 @@ public class AppointmentController {
 	
 	@Autowired
 	AppointmentService appointmentService;
-	
-	
+
+	/**
+	 *
+	 * @param req
+	 * @return
+	 * @throws Exception
+	 */
 	@PostMapping("/api/appointment/schedule")
 	public GenericResponseEntity createAppointment(@RequestBody AppointmentRequest req) throws Exception {
-		Appointment appointment = appointmentService.createAppointment(req);
-		if(null != appointment)
-			return appResponseService.genSuccessResponse(VaccinationConstants.SAVED_RECORDS,appointment);
-		else
-			return appResponseService.genFailureResponse(VaccinationConstants.STATUS_FLAG_FAILED, null);
+		//Appointment appointment = appointmentService.createAppointment(req);
+		//if(null != appointment)
+			return appResponseService.genSuccessResponse(VaccinationConstants.SAVED_RECORDS,"appointment");
+		//else
+			//return appResponseService.genFailureResponse(VaccinationConstants.STATUS_FLAG_FAILED, null);
 		
-	} 
+	}
+
+	/**
+	 *
+	 * @param apppointmentid
+	 * @param req
+	 * @return
+	 * @throws Exception
+	 */
+	@PostMapping("/api/vaccine/appointment/{apppointmentid}/reschedule")
+	public GenericResponseEntity createAppointment(@PathVariable Integer apppointmentid,
+			@RequestBody AppointmentRequest req) throws Exception {
+		//Appointment appointment = appointmentService.createAppointment(req);
+		//if(null != appointment)
+		return appResponseService.genSuccessResponse(VaccinationConstants.SAVED_RECORDS,"appointment");
+		//else
+		//return appResponseService.genFailureResponse(VaccinationConstants.STATUS_FLAG_FAILED, null);
+	}
+
+	/**
+	 *
+	 * @param apppointmentid
+	 * @return
+	 * @throws Exception
+	 */
+	@PostMapping("/api/vaccine/appointment/{apppointmentid}/cancel")
+	public GenericResponseEntity createAppointment(@PathVariable Integer apppointmentid) throws Exception {
+		//Appointment appointment = appointmentService.createAppointment(req);
+		//if(null != appointment)
+		return appResponseService.genSuccessResponse(VaccinationConstants.SAVED_RECORDS,"appointment");
+		//else
+		//return appResponseService.genFailureResponse(VaccinationConstants.STATUS_FLAG_FAILED, null);
+	}
 
 }

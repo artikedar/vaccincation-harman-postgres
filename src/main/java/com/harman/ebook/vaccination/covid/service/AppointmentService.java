@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +44,7 @@ public class AppointmentService {
 			null != req.getSlotNo()) {
 			Optional<List<Appointment>> fetched=appointmentrepo.findByEmpMasterId(
 					req.getEmpMasterId());
-			if(fetched.isEmpty()) {
+			if(ObjectUtils.isEmpty(fetched)) {
 				boolean isSuccess=createBooking(req,personIds);
 				if(isSuccess) {
 					Appointment active=getActiveAppointment(req.getEmpMasterId());
@@ -89,7 +91,8 @@ public class AppointmentService {
 		appointment.setModifiedby((getEmployeeId(req)==null?null:getEmployeeId(req).toString()));
 		return appointment;
 	}
-	
+
+	@Transactional
 	private boolean createBooking(AppointmentRequest req, 
 			List<Integer> personIds) throws Exception {
 		boolean isCompleted=false;

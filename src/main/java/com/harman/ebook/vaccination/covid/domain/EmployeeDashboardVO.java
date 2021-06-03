@@ -45,10 +45,7 @@ public class EmployeeDashboardVO {
     @JsonProperty("empMasterId")
     private Integer empMasterId;
 
-    @JsonProperty("empVaccAppId")
-    private Integer empVaccAppId;
-
-    @JsonProperty("empVaccAppointmentVO")
+    @JsonProperty("empVacAppointmentInfo")
     private EmpVaccAppointmentVO empVaccAppointmentVO;
  }
 

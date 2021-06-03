@@ -26,4 +26,14 @@ public class VaccineScheduleController {
     public GenericResponseEntity scheduleVaccine(@RequestBody AppointmentRequest req) {
         return vaccineScheduleService.scheduleVaccine(req);
     }
+
+    /**
+     * Cancels the appointment for vaccination
+     * @param req
+     * @return
+     */
+    @PostMapping("/api/appointment/cancel")
+    public GenericResponseEntity cancelVaccine(@RequestBody AppointmentRequest req) {
+        return vaccineScheduleService.cancelVaccine(req);
+    }
 }

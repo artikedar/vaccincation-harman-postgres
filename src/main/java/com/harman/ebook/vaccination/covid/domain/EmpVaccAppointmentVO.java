@@ -14,31 +14,13 @@ import java.util.Date;
 @ToString
 public class EmpVaccAppointmentVO {
 
-    @JsonProperty("empVaccId")
-    private Integer empVaccSchId;
+    @JsonProperty("slotNo")
+    private Short slotNo;
 
-    @JsonProperty("personId")
-    private Integer personId;
+    @JsonProperty("empVaccAppId")
+    private Integer empVaccAppId;
 
     @JsonProperty("dateOfVaccination")
     private Date dateOfVaccination;
-
-    @JsonProperty("status")
-    private String status;
-
-    @JsonProperty("isBookingActive")
-    private Boolean isBookingActive;
-
-    @JsonProperty("doseLevel")
-    private Short doseLevel;
-
-    @JsonProperty("location")
-    private Short location;
-
-    @JsonProperty("vacType")
-    private Short vacType;
-
-    @JsonProperty("slotNo")
-    private Short slotNo;
 
 }

@@ -17,6 +17,4 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 public interface PersonRespository extends JpaRepository<Person, Integer> {
 	List<Person> findPersonByEmpMasterId(Integer empId);
 
-	Person findByPersonId(Integer personId);
-
 }

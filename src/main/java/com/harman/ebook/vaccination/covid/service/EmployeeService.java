@@ -6,6 +6,7 @@ import java.util.List;
 import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
 import com.harman.ebook.vaccination.covid.domain.EmpVaccAppointmentVO;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
+import com.harman.ebook.vaccination.covid.repository.EmployeeVaccSchInfoRepository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import com.harman.ebook.vaccination.covid.entity.Person;
 import com.harman.ebook.vaccination.covid.repository.MasterEmpRespository;
 import com.harman.ebook.vaccination.covid.repository.PersonRespository;
 
+import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_BOOKED;
+
 @Service
 public class EmployeeService {
     @Autowired
@@ -26,36 +29,44 @@ public class EmployeeService {
     PersonRespository personRepository;
 
     @Autowired
+    EmployeeVaccSchInfoRepository employeeVaccSchInfoRepository;
+
+    @Autowired
     private ApplicationResponseService appResponseService;
 
     public List<EmployeeMaster> getEmployee() {
         return emprepos.findAll();
     }
 
+    /**
+     *
+     * @param id
+     * @return Empolyee data for given id
+     */
     public EmployeeMaster findByEmployeeId(Integer id) {
         EmployeeMaster employeeRec = emprepos.findByEmployeeId(id);
         return employeeRec;
     }
 
+    /**
+     *
+     * @param empId
+     * @return GenericResponseEnity - List of EmployeeDashboardVO
+     */
     public GenericResponseEntity getEmployeeDashboardResponse(Integer empId) {
         List<EmployeeDashboardVO> vo = getEmployeeDashboard(empId);
         return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, vo);
     }
 
+    /**
+     *
+     * @param empId
+     * @return List of EmployeeDashboardVO
+     */
     public List<EmployeeDashboardVO> getEmployeeDashboard(Integer empId) {
         List<Person> person = personRepository.findPersonByEmpMasterId(empId);
         return getEmployeeDashboardVOList(person);
     }
-
-//    public List<EmployeeDashboardVO> getEmployeeDashboardVOListForSchedule(List<EmployeeVaccAppointmentInfo> employeeVaccAppointmentInfoList, EmpVaccAppointmentVO empVaccAppointmentVO) {
-//        List<EmployeeDashboardVO> voList = new ArrayList<>();
-//        for(EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo : employeeVaccAppointmentInfoList) {
-//            Person person = personRepository.findByPersonId(employeeVaccAppointmentInfo.getPersonId());
-//            EmployeeDashboardVO employeeDashboardVO = getEmployeeDashboardVO(person);
-//
-//        }
-//
-//    }
 
     private List<EmployeeDashboardVO> getEmployeeDashboardVOList(List<Person> personList) {
         List<EmployeeDashboardVO> voList = new ArrayList<>();
@@ -77,8 +88,16 @@ public class EmployeeService {
         employeeDashboardVO.setIsDoseII(person.getIsDoseII());
         employeeDashboardVO.setVacType(person.getVacType());
         employeeDashboardVO.setPersonAge(person.getPersonAge());
+        employeeDashboardVO.setEmpVaccAppointmentVO(getEmpVaccAppointmentVO(person.getPersonId()));
         return employeeDashboardVO;
     }
 
-
+    private EmpVaccAppointmentVO getEmpVaccAppointmentVO(Integer personId) {
+        EmpVaccAppointmentVO empVaccAppointmentVO = new EmpVaccAppointmentVO();
+        EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo = employeeVaccSchInfoRepository.findEmployeeVaccAppointmentInfoByPersonIdAndStatus(personId, LOV_APP_STATUS_BOOKED);
+        empVaccAppointmentVO.setEmpVaccAppId(employeeVaccAppointmentInfo.getEmpVaccAppId());
+        empVaccAppointmentVO.setSlotNo(employeeVaccAppointmentInfo.getSlotNo());
+        empVaccAppointmentVO.setDateOfVaccination(employeeVaccAppointmentInfo.getDateOfVaccination());
+        return empVaccAppointmentVO;
+    }
 }

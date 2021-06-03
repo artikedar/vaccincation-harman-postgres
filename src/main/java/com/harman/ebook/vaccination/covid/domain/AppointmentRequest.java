@@ -35,4 +35,7 @@ public class AppointmentRequest {
 
 	@JsonProperty("vacType")
 	private Short vacType;
+
+	@JsonProperty("empVaccAppIds")
+	private List<Integer> empVaccAppIds;
 }

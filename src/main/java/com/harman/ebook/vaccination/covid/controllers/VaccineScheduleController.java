@@ -33,7 +33,8 @@ public class VaccineScheduleController {
      * @return
      */
     @PostMapping("/api/appointment/cancel")
-    public GenericResponseEntity cancelVaccine(@RequestBody AppointmentRequest req) {
-        return vaccineScheduleService.cancelVaccine(req);
+    public GenericResponseEntity cancelScheduledVaccine(@RequestParam(name = "empVaccAppId") Integer empVaccAppId,
+        @RequestParam(name = "empMasterId") Integer empMasterId) {
+        return vaccineScheduleService.cancelScheduledVaccine(empVaccAppId,empMasterId);
     }
 }

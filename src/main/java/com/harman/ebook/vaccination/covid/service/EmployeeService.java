@@ -17,6 +17,7 @@ import com.harman.ebook.vaccination.covid.entity.EmployeeMaster;
 import com.harman.ebook.vaccination.covid.entity.Person;
 import com.harman.ebook.vaccination.covid.repository.MasterEmpRespository;
 import com.harman.ebook.vaccination.covid.repository.PersonRespository;
+import org.springframework.util.ObjectUtils;
 
 import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_BOOKED;
 
@@ -92,12 +93,21 @@ public class EmployeeService {
         return employeeDashboardVO;
     }
 
+    /**
+     *
+     * @param personId
+     * @return
+     */
     private EmpVaccAppointmentVO getEmpVaccAppointmentVO(Integer personId) {
         EmpVaccAppointmentVO empVaccAppointmentVO = new EmpVaccAppointmentVO();
         EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo = employeeVaccSchInfoRepository.findEmployeeVaccAppointmentInfoByPersonIdAndStatus(personId, LOV_APP_STATUS_BOOKED);
-        empVaccAppointmentVO.setEmpVaccAppId(employeeVaccAppointmentInfo.getEmpVaccAppId());
-        empVaccAppointmentVO.setSlotNo(employeeVaccAppointmentInfo.getSlotNo());
-        empVaccAppointmentVO.setDateOfVaccination(employeeVaccAppointmentInfo.getDateOfVaccination());
+       if(!ObjectUtils.isEmpty(employeeVaccAppointmentInfo)) {
+           empVaccAppointmentVO.setEmpVaccAppId(employeeVaccAppointmentInfo.getEmpVaccAppId());
+           empVaccAppointmentVO.setSlotNo(employeeVaccAppointmentInfo.getSlotNo());
+           empVaccAppointmentVO
+               .setDateOfVaccination(employeeVaccAppointmentInfo.getDateOfVaccination());
+       } else {return null;}
+
         return empVaccAppointmentVO;
     }
 }

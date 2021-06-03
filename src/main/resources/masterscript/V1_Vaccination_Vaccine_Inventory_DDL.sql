@@ -1,7 +1,6 @@
 /* vaccine inventory */
-
-DROP TABLE IF EXISTS covid.vaccine_inventory;
 DROP SEQUENCE IF EXISTS covid.vaccine_inventory_seq;
+DROP TABLE IF EXISTS covid.vaccine_inventory;
 CREATE SEQUENCE covid.vaccine_inventory_seq
     INCREMENT BY 1
     MINVALUE 1

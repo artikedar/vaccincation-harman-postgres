@@ -106,7 +106,7 @@ public class EmployeeService {
            empVaccAppointmentVO.setSlotNo(employeeVaccAppointmentInfo.getSlotNo());
            empVaccAppointmentVO
                .setDateOfVaccination(employeeVaccAppointmentInfo.getDateOfVaccination());
-       } else {return null;}
+       }
 
         return empVaccAppointmentVO;
     }

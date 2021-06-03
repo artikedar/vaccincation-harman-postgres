@@ -24,5 +24,5 @@ public final class VaccinationConstants {
   public static final String APPOINTMENT_EXIST_ALREADY = "You can't create more than one appointment";
   public static final Short SLOT = 4;
   public static final Short NO_OF_SLOTS = 6;
-
+  public static final int NEXT_DAYS = 6;
 }

@@ -15,8 +15,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.harman.ebook.vaccination.covid.constants.VaccinationConstants.NEXT_DAYS;
+
 @Service
 public class VaccineCalendarService {
+
     @Autowired
     private ApplicationResponseService appResponseService;
 
@@ -32,7 +35,7 @@ public class VaccineCalendarService {
      */
     public GenericResponseEntity getVaccineCalendarVO(String fromDateString, Short location) throws ParseException {
         Date fromDate = DateUtil.getDate(fromDateString);
-        Date tillDate = DateUtil.getNextDate(fromDate, 4);
+        Date tillDate = DateUtil.getNextDate(fromDate, NEXT_DAYS);
         List<VaccineInventory> vaccineInventoryList = vaccineInventoryRepository.findByLocationAndDateOfAvailabilityBetweenAndIsActive(location, fromDate, tillDate, true);
         return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, getVaccineCalendarVO(vaccineInventoryList));
     }

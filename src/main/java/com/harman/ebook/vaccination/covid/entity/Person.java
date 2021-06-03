@@ -1,31 +1,13 @@
 package com.harman.ebook.vaccination.covid.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
+import lombok.*;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.data.rest.core.annotation.RestResource;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author Bhagwat Rokade
@@ -100,9 +82,4 @@ public class Person extends BaseEntity implements Serializable{
 	  @JoinColumn(name="empmasterid", referencedColumnName="empmasterid", updatable = false, insertable=false)
 	  private EmployeeMaster employeeMaster;
 	  
-	  @ManyToOne
-	  @JoinColumn(name="appointmentid", referencedColumnName="appointmentid", updatable = true, insertable=false)
-	  private Appointment appointment;
-	  
-
 }

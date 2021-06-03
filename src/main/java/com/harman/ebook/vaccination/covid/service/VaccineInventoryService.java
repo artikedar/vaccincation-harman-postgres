@@ -49,28 +49,25 @@ public class VaccineInventoryService {
             VaccineInventory inventory = getVaccineInventory(vacInvSchedule, schedule);
             inventoryList.add(inventory);
         }
-        vaccineInventoryRepository.saveAll(inventoryList);
-        for(int i=0; i<vacInvSchedule.getSchedule().size(); i++) {
-            Schedule schedule = vacInvSchedule.getSchedule().get(i);
-            Date dateOfAvailability = DateUtil.getDate(schedule.getDate());
-            VaccineInventory inventory = vaccineInventoryRepository.findVaccineInventoryByVacTypeAndLocationAndDateOfAvailability(vacInvSchedule.getVacType(), vacInvSchedule.getLocation(), dateOfAvailability);
-            List<SlotInfo> slotInfoList = getSlotInfoList(lovList, inventory, vacInvSchedule.getLocation(), schedule);
+        List<VaccineInventory> savedInventoryList = vaccineInventoryRepository.saveAll(inventoryList);
+        for(VaccineInventory vacInv : savedInventoryList) {
+            List<SlotInfo> slotInfoList = getSlotInfoList(lovList, vacInv);
             slotInfoRepository.saveAll(slotInfoList);
         }
         return appResponseService.genSuccessResponse(VaccinationConstants.SAVED_RECORDS, inventoryList.size());
     }
 
-    private List<SlotInfo> getSlotInfoList(List<Lov> lovList, VaccineInventory inventory, Short location, Schedule schedule) {
+    private List<SlotInfo> getSlotInfoList(List<Lov> lovList, VaccineInventory inventory) {
         List<SlotInfo> slotInfoList = new ArrayList<>();
-        int noOfDosesPerSlot = schedule.getNoOfDoses() / NO_OF_SLOTS;
+        int noOfDosesPerSlot = inventory.getNoOfDoses() / NO_OF_SLOTS;
         int remainingDoses = 0;
-        if(schedule.getNoOfDoses() % NO_OF_SLOTS != 0) {
-            remainingDoses = schedule.getNoOfDoses() - (noOfDosesPerSlot * NO_OF_SLOTS) + noOfDosesPerSlot;
+        if(inventory.getNoOfDoses() % NO_OF_SLOTS != 0) {
+            remainingDoses = inventory.getNoOfDoses() - (noOfDosesPerSlot * NO_OF_SLOTS) + noOfDosesPerSlot;
         }
         for(int j=0; j<lovList.size(); j++) {
             SlotInfo slotInfo = new SlotInfo();
             slotInfo.setSlotNo(lovList.get(j).getValueid().shortValue());
-            slotInfo.setLocation(location);
+            slotInfo.setLocation(inventory.getLocation());
             slotInfo.setNoOfAvailableDoses((short) noOfDosesPerSlot);
             slotInfo.setNoOfDoses((short) noOfDosesPerSlot);
             slotInfo.setNoOfBookedDoses((short) 0);

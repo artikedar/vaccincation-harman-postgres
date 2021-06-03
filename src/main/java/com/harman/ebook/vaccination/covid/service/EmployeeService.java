@@ -1,5 +1,6 @@
 package com.harman.ebook.vaccination.covid.service;
 
+import com.harman.ebook.vaccination.covid.util.DateUtil;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
 import com.harman.ebook.vaccination.covid.repository.EmployeeVaccSchInfoRepository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -105,7 +107,7 @@ public class EmployeeService {
            empVaccAppointmentVO.setEmpVaccAppId(employeeVaccAppointmentInfo.getEmpVaccAppId());
            empVaccAppointmentVO.setSlotNo(employeeVaccAppointmentInfo.getSlotNo());
            empVaccAppointmentVO
-               .setDateOfVaccination(employeeVaccAppointmentInfo.getDateOfVaccination());
+               .setDateOfVaccination(DateUtil.getDateString(employeeVaccAppointmentInfo.getDateOfVaccination()));
        }
 
         return empVaccAppointmentVO;

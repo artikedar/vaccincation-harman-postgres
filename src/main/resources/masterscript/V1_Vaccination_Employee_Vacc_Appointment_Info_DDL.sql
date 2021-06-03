@@ -57,6 +57,6 @@ CREATE TABLE covid.employee_vacc_appointment_info_aud
     modifiedon        timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     modifiedby        varchar(255) NULL,
     isactive          bool NULL DEFAULT true,
-    CONSTRAINT employee_vacc_appointment_info_empvaccappid_aud_pk PRIMARY KEY (empVaccAppId)
+    CONSTRAINT employee_vacc_appointment_info_empvaccappid_aud_pk PRIMARY KEY (empVaccAppId,rev)
 );
 grant all ON table covid.employee_vacc_appointment_info_aud TO vacadmin;

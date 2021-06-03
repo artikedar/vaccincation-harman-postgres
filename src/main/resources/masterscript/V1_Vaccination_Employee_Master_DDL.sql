@@ -51,7 +51,7 @@ CREATE TABLE covid.employee_master_aud
     modifiedon        timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     modifiedby        varchar(255) NULL,
     isactive          bool NULL DEFAULT true,
-    CONSTRAINT employee_master_aud_pk PRIMARY KEY (empmasterid)
+    CONSTRAINT employee_master_aud_pk PRIMARY KEY (empmasterid,rev)
 );
 grant all ON table covid.employee_master_aud TO vacadmin;
 

@@ -21,6 +21,6 @@ public class EmpVaccAppointmentVO {
     private Integer empVaccAppId;
 
     @JsonProperty("dateOfVaccination")
-    private Date dateOfVaccination;
+    private String dateOfVaccination;
 
 }

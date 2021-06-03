@@ -19,3 +19,4 @@ CREATE TABLE covid.revinfo(
                               revtstmp bigint,
                               CONSTRAINT revinfo_pkey PRIMARY KEY (rev)
 );
+GRANT all ON table covid.revinfo TO vacadmin;

@@ -33,15 +33,20 @@ public class VaccineScheduleService {
      */
     @Transactional
     public GenericResponseEntity scheduleVaccine(AppointmentRequest req) {
+
+        //update the status to cancel for exsisting appointment
+        for(Integer appointmentNo: req.getEmpVaccAppIds()){
+            cancelVaccine(appointmentNo);
+        }
+        //schedule new appointment for all person in req payalod
         List<EmployeeVaccAppointmentInfo> appointmentInfoList = new ArrayList<>();
         for(Integer personId : req.getPersonIds()) {
             EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo = getEmpolyeeVaccSchInfo(req, personId, LOV_APP_STATUS_BOOKED, Boolean.TRUE);
             appointmentInfoList.add(employeeVaccAppointmentInfo);
         }
         employeeVaccSchInfoRepository.saveAll(appointmentInfoList);
-        for(Integer appointmentNo: req.getEmpVaccAppIds()){
-            cancelVaccine(appointmentNo);
-        }
+
+        //return the dashbaord response vo
         return employeeService.getEmployeeDashboardResponse(req.getEmpMasterId());
     }
 

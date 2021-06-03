@@ -73,6 +73,6 @@ CREATE TABLE covid.person_aud
     isactive          bool         NULL DEFAULT true,
     rev               int4 NULL,
     revtype           int2,
-    CONSTRAINT personId_aud_pk PRIMARY KEY (personId)
+    CONSTRAINT personId_aud_pk PRIMARY KEY (personId,rev)
 );
 grant all ON table covid.person_aud TO vacadmin;

@@ -47,6 +47,6 @@ CREATE TABLE covid.vaccine_inventory_aud
     modifiedon timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     modifiedby varchar(255) NULL,
     isactive bool  NULL DEFAULT true,
-    CONSTRAINT vacInvId_aud_pk PRIMARY KEY (vacInvId)
+    CONSTRAINT vacInvId_aud_pk PRIMARY KEY (vacInvId,rev)
 );
 grant all ON table covid.vaccine_inventory_aud TO vacadmin;

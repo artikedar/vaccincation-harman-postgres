@@ -46,9 +46,9 @@ public class VaccineCalendarService {
             VaccineCalendarVO vaccineCalendarVO = new VaccineCalendarVO();
             vaccineCalendarVO.setVacType(vacInv.getVacType());
             vaccineCalendarVO.setLocation(vacInv.getLocation());
-            vaccineCalendarVO.setNoOfDoses(vacInv.getNoOfDoses());
+            vaccineCalendarVO.setNoOfDoses(vacInv.getTotalNoOfDoses());
             vaccineCalendarVO.setDateOfAvailability(DateUtil.getDateString(vacInv.getDateOfAvailability()));
-            vaccineCalendarVO.setNoOfDoses(vacInv.getNoOfDoses());
+            vaccineCalendarVO.setNoOfDoses(vacInv.getTotalNoOfDoses());
             voList.add(vaccineCalendarVO);
         };
         return voList;

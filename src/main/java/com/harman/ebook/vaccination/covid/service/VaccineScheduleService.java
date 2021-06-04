@@ -2,6 +2,7 @@ package com.harman.ebook.vaccination.covid.service;
 
 import com.harman.ebook.vaccination.covid.domain.AppointmentRequest;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
+import com.harman.ebook.vaccination.covid.entity.VaccineInventory;
 import com.harman.ebook.vaccination.covid.repository.EmployeeVaccSchInfoRepository;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
@@ -26,6 +27,9 @@ public class VaccineScheduleService {
     @Autowired
     private EmployeeService employeeService;
 
+    @Autowired
+    private VaccineInventoryService vaccineInventoryService;
+
     /**
      * set the status appointment status to booked = 1
      * @param req : AppointmentRequest
@@ -45,6 +49,9 @@ public class VaccineScheduleService {
             appointmentInfoList.add(employeeVaccAppointmentInfo);
         }
         employeeVaccSchInfoRepository.saveAll(appointmentInfoList);
+
+        //update slots into vaccine inventory
+        vaccineInventoryService.updateDoseAvailability(req);
 
         //return the dashbaord response vo
         return employeeService.getEmployeeDashboardResponse(req.getEmpMasterId());

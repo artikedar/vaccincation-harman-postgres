@@ -26,25 +26,31 @@ import java.util.Date;
 @Table(name = "vaccine_inventory", schema = "covid")
 @SequenceGenerator(name = "vaccineInventorySeq", sequenceName = "vaccine_inventory_seq", schema = "covid", initialValue = 1, allocationSize = 1)
 public class VaccineInventory extends BaseEntity {
-	
-	private static final long serialVersionUID = -384180042546432865L;
 
-	  @Id
-	  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vaccineInventorySeq")
-	  @Column(name = "vacInvId", nullable = false, updatable = false, insertable = false)
-	  private Integer vacInvId;
+    private static final long serialVersionUID = -384180042546432865L;
 
-	  @Column(name="vacType")
-	  private Short vacType;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vaccineInventorySeq")
+    @Column(name = "vacInvId", nullable = false, updatable = false, insertable = false)
+    private Integer vacInvId;
 
-	  @Column(name = "dateofavailability")
-	  @Temporal(TemporalType.DATE)
-	  private Date dateOfAvailability;
+    @Column(name = "vacType")
+    private Short vacType;
 
-	  @Column(name = "noOfDoses")
-	  private Short noOfDoses;
+    @Column(name = "dateofavailability")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfAvailability;
 
-	  @Column(name="location")
-	  private Short location;
+    @Column(name = "totalNoOfDoses")
+    private Short totalNoOfDoses;
+
+    @Column(name = "noOfBookedDoses")
+    private Short noOfBookedDoses;
+
+    @Column(name = "noOfAvailableDoses")
+    private Short noOfAvailableDoses;
+
+    @Column(name = "location")
+    private Short location;
 
 }

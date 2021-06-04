@@ -1,6 +1,7 @@
 package com.harman.ebook.vaccination.covid.service;
 
 import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
+import com.harman.ebook.vaccination.covid.domain.AppointmentRequest;
 import com.harman.ebook.vaccination.covid.domain.Schedule;
 import com.harman.ebook.vaccination.covid.domain.VaccineInventorySchedule;
 import com.harman.ebook.vaccination.covid.entity.Lov;
@@ -14,6 +15,7 @@ import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static com.harman.ebook.vaccination.covid.constants.VaccinationConstants.*;
 
@@ -59,21 +62,21 @@ public class VaccineInventoryService {
 
     private List<SlotInfo> getSlotInfoList(List<Lov> lovList, VaccineInventory inventory) {
         List<SlotInfo> slotInfoList = new ArrayList<>();
-        int noOfDosesPerSlot = inventory.getNoOfDoses() / NO_OF_SLOTS;
+        int noOfDosesPerSlot = inventory.getTotalNoOfDoses() / NO_OF_SLOTS;
         int remainingDoses = 0;
-        if(inventory.getNoOfDoses() % NO_OF_SLOTS != 0) {
-            remainingDoses = inventory.getNoOfDoses() - (noOfDosesPerSlot * NO_OF_SLOTS) + noOfDosesPerSlot;
+        if(inventory.getTotalNoOfDoses() % NO_OF_SLOTS != 0) {
+            remainingDoses = inventory.getTotalNoOfDoses() - (noOfDosesPerSlot * NO_OF_SLOTS) + noOfDosesPerSlot;
         }
         for(int j=0; j<lovList.size(); j++) {
             SlotInfo slotInfo = new SlotInfo();
             slotInfo.setSlotNo(lovList.get(j).getValueid().shortValue());
             slotInfo.setLocation(inventory.getLocation());
             slotInfo.setNoOfAvailableDoses((short) noOfDosesPerSlot);
-            slotInfo.setNoOfDoses((short) noOfDosesPerSlot);
+            slotInfo.setTotalNoOfDoses((short) noOfDosesPerSlot);
             slotInfo.setNoOfBookedDoses((short) 0);
             slotInfo.setVacInvId(inventory.getVacInvId());
             if(remainingDoses!=0 && j == lovList.size() - 1) {
-                slotInfo.setNoOfDoses((short) remainingDoses);
+                slotInfo.setTotalNoOfDoses((short) remainingDoses);
                 slotInfo.setNoOfAvailableDoses((short) remainingDoses);
             }
             slotInfoList.add(slotInfo);
@@ -86,9 +89,44 @@ public class VaccineInventoryService {
         inventory.setVacType(vacInvSchedule.getVacType());
         inventory.setLocation(vacInvSchedule.getLocation());
         inventory.setDateOfAvailability(DateUtil.getDate(schedule.getDate()));
-        inventory.setNoOfDoses(schedule.getNoOfDoses());
+        inventory.setTotalNoOfDoses(schedule.getNoOfDoses());
         inventory.setIsactive(Boolean.TRUE);
         return inventory;
     }
 
+//    @Transactional
+    public void updateDoseAvailability(AppointmentRequest req) {
+
+        Date bookingDate = DateUtil.getDate(req.getBookingDate());
+
+        //fetch vacInvId according to request and update the number of doses
+        VaccineInventory vaccineInventory = vaccineInventoryRepository.findVaccineInventoryByVacTypeAndLocationAndDateOfAvailability(req.getVacType(), req.getLocation(), bookingDate);
+        Integer requestedDoses = req.getPersonIds().size();
+        Integer noOfAvailableDoses = vaccineInventory.getNoOfAvailableDoses().intValue();
+        Integer noOfBookedDoses = vaccineInventory.getNoOfAvailableDoses().intValue();
+
+        Integer noOfActualAvailableDoses = noOfAvailableDoses - requestedDoses;
+        Integer noOfActualBookedDoses = noOfBookedDoses + requestedDoses;
+
+        vaccineInventory.setNoOfAvailableDoses(noOfActualAvailableDoses.shortValue());
+        vaccineInventory.setNoOfBookedDoses(noOfActualBookedDoses.shortValue());
+
+        vaccineInventoryRepository.save(vaccineInventory);
+
+        //fetch slotInfo according to vacInvId and slotNo
+        List<SlotInfo> slotInfoList = slotInfoRepository.findSlotInfosByVacInvId(vaccineInventory.getVacInvId());
+        slotInfoList = slotInfoList.stream().filter(slotInfo -> slotInfo.getSlotNo() == req.getSlotNo()).collect(Collectors.toList());
+        if(!CollectionUtils.isEmpty(slotInfoList)) {
+            SlotInfo slotInfoToBeModified = slotInfoList.get(0);
+            Integer noOfBookedDosesForSlot = slotInfoToBeModified.getNoOfBookedDoses().intValue();
+            Integer noOfAvailableDosesForSlot = slotInfoToBeModified.getNoOfAvailableDoses().intValue();
+
+            Integer noOfNewBookedDosesForSlot = noOfBookedDosesForSlot + requestedDoses;
+            Integer noOfNewAvailableDosesForSlot = noOfAvailableDosesForSlot - requestedDoses;
+
+            slotInfoToBeModified.setNoOfBookedDoses(noOfNewBookedDosesForSlot.shortValue());
+            slotInfoToBeModified.setNoOfAvailableDoses(noOfNewAvailableDosesForSlot.shortValue());
+            slotInfoRepository.save(slotInfoToBeModified);
+        }
+    }
 }

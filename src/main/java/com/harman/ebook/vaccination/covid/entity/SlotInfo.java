@@ -34,8 +34,8 @@ public class SlotInfo extends BaseEntity {
     @Column(name = "slotNo")
     private Short slotNo;
 
-    @Column(name = "noOfDoses")
-    private Short noOfDoses;
+    @Column(name = "totalNoOfDoses")
+    private Short totalNoOfDoses;
 
     @Column(name = "noOfBookedDoses")
     private Short noOfBookedDoses;

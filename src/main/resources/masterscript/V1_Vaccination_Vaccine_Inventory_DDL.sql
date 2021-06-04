@@ -41,7 +41,7 @@ CREATE TABLE covid.vaccine_inventory_aud
     vacType    int2         NULL,
     dateofavailability     date    NULL,
     totalNoOfDoses   int2         NULL,
-    noOfBookedDoses   int2         NULL,
+    noOfBookedDoses   int2         NULL ,
     noOfAvailableDoses   int2         NULL,
     location    int2         NULL,
     rev               int4 NULL,

@@ -10,5 +10,7 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "slotInfo", path = "slot_info")
 public interface SlotInfoRepository extends JpaRepository<SlotInfo, Integer>{
 
+    SlotInfo findSlotInfosByVacInvIdAndSlotNo(Integer vacInvId, Short slotNo);
+
     List<SlotInfo> findSlotInfosByVacInvId(Integer vacInvId);
 }

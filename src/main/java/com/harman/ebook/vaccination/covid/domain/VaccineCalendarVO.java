@@ -2,6 +2,7 @@ package com.harman.ebook.vaccination.covid.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.harman.ebook.vaccination.covid.entity.SlotInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,5 +29,8 @@ public class VaccineCalendarVO implements Serializable {
 
     @JsonProperty("location")
     private Short location;
+
+    @JsonProperty("slotInfoList")
+    private List<SlotInfoVO> slotInfoList;
 
 }

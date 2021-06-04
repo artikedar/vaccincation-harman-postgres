@@ -79,6 +79,10 @@ public class VaccineScheduleService {
         if(!ObjectUtils.isEmpty(appointmentInfo)){
             appointmentInfo.setStatus(LOV_APP_STATUS_CANCELED);
             employeeVaccSchInfoRepository.save(appointmentInfo);
+
+            //update slots into vaccine inventory
+            vaccineInventoryService.updateDoseAvailability(appointmentInfo);
+
             return true;
         }
         return false;

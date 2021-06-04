@@ -53,6 +53,6 @@ CREATE TABLE covid.slot_info_aud
     modifiedon timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     modifiedby varchar(255) NULL,
     isactive bool  NULL DEFAULT true,
-    CONSTRAINT slotInfoId_aud_pk PRIMARY KEY (slotInfoId)
+    CONSTRAINT slotInfoId_aud_pk PRIMARY KEY (slotInfoId, rev)
 );
 grant all ON table covid.slot_info_aud TO vacadmin;

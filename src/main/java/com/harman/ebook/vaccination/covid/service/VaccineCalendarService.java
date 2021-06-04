@@ -1,12 +1,16 @@
 package com.harman.ebook.vaccination.covid.service;
 
 import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
+import com.harman.ebook.vaccination.covid.domain.SlotInfoVO;
 import com.harman.ebook.vaccination.covid.domain.VaccineCalendarVO;
+import com.harman.ebook.vaccination.covid.entity.SlotInfo;
 import com.harman.ebook.vaccination.covid.entity.VaccineInventory;
+import com.harman.ebook.vaccination.covid.repository.SlotInfoRepository;
 import com.harman.ebook.vaccination.covid.repository.VaccineInventoryRepository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +29,9 @@ public class VaccineCalendarService {
 
     @Autowired
     private VaccineInventoryRepository vaccineInventoryRepository;
+
+    @Autowired
+    private SlotInfoRepository slotInfoRepository;
 
     /**
      *
@@ -49,6 +56,10 @@ public class VaccineCalendarService {
             vaccineCalendarVO.setNoOfDoses(vacInv.getTotalNoOfDoses());
             vaccineCalendarVO.setDateOfAvailability(DateUtil.getDateString(vacInv.getDateOfAvailability()));
             vaccineCalendarVO.setNoOfDoses(vacInv.getTotalNoOfDoses());
+            List<SlotInfo> slotInfoList = slotInfoRepository.findSlotInfosByVacInvId(vacInv.getVacInvId());
+            List<SlotInfoVO> slotInfoVOList = new ArrayList<>();
+            BeanUtils.copyProperties(slotInfoVOList, slotInfoList);
+            vaccineCalendarVO.setSlotInfoList(slotInfoVOList);
             voList.add(vaccineCalendarVO);
         };
         return voList;

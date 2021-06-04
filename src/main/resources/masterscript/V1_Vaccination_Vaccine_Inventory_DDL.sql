@@ -11,7 +11,7 @@ CREATE SEQUENCE covid.vaccine_inventory_seq
 
 CREATE TABLE covid.vaccine_inventory
 (
-    vacInvId       int4        NOT NULL DEFAULT nextval('covid.employee_vacc_sch_info_seq'::regclass),
+    vacInvId       int4        NOT NULL DEFAULT nextval('covid.vaccine_inventory_seq'::regclass),
     vacType    int2        NOT NULL,
     dateofavailability     DATE   NOT NULL,
     noOfDoses   int2        NOT NULL,

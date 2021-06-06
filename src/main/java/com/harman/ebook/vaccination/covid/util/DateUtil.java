@@ -65,11 +65,12 @@ public class DateUtil {
      * @return
      */
     public static Date formatDate(String doj  ){
-
+        Date date = null;
         try {
             return new SimpleDateFormat(DATE_FORMAT).parse(doj);
         } catch (ParseException e) {
-            throw new IllegalArgumentException("Date format not valid");
+            e.printStackTrace();
         }
+        return date;
     }
 }

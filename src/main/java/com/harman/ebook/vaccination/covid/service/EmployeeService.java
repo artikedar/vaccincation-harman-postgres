@@ -30,7 +30,7 @@ public class EmployeeService {
     PersonRespository personRepository;
 
     @Autowired
-    EmployeeService employeeService;
+    EmpMasterRespository empMasterRespository;
 
     @Autowired
     EmployeeVaccSchInfoRepository employeeVaccSchInfoRepository;
@@ -42,15 +42,6 @@ public class EmployeeService {
         return emprepos.findAll();
     }
 
-    /**
-     *
-     * @param id
-     * @return Empolyee data for given id
-     */
-    public EmployeeMaster findByEmployeeId(Integer id) {
-        EmployeeMaster employeeRec = emprepos.findByEmployeeId(id);
-        return employeeRec;
-    }
 
     /**
      *
@@ -59,7 +50,7 @@ public class EmployeeService {
      */
     public GenericResponseEntity getEmployeeDashboardResponse(Integer empId) {
         DashboardResponseVO dashboardresVO = new DashboardResponseVO();
-        EmployeeMaster employeeMaster = findByEmployeeId(empId);
+        EmployeeMaster employeeMaster = empMasterRespository.findById(empId).orElseThrow(null);
         List<EmployeeDashboardVO> employeeDashboardVOList = getEmployeeDashboard(empId);
         dashboardresVO.setEmployeeMaster(employeeMaster);
         dashboardresVO.setEmployeeDashboardVOS(employeeDashboardVOList);

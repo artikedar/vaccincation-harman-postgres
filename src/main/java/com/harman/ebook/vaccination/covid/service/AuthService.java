@@ -2,6 +2,7 @@ package com.harman.ebook.vaccination.covid.service;
 
 import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
 import com.harman.ebook.vaccination.covid.entity.EmployeeMaster;
+import com.harman.ebook.vaccination.covid.repository.EmpMasterRespository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
@@ -21,6 +22,9 @@ public class AuthService {
 	@Autowired
 	EmployeeService employeeService;
 
+	@Autowired
+	EmpMasterRespository empMasterRespository;
+
 	/**
 	 * @param empId
 	 * @param doj
@@ -36,7 +40,7 @@ public class AuthService {
 		} catch (Exception e) {
 			appResponseService.genFailureResponse("Date format not valid","");
 		}
-		empInfo = empService.findByEmployeeId(empId);
+		empInfo = empMasterRespository.findByEmployeeId(empId);
 		if (null != empInfo && empInfo.getIsactive()) {
 			String strDate = empInfo.getDateOfJoining().toString().substring(0, 10);
 			Date dbDoj =  DateUtil.formatDate(strDate);;

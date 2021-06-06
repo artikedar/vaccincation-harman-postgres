@@ -6,6 +6,8 @@
  */
 package com.harman.ebook.vaccination.covid.exceptions;
 
+import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
+import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import javax.persistence.RollbackException;
@@ -15,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.exception.DataException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,13 +36,16 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public static final HttpStatus HTTP_ERROR_STATUS = HttpStatus.OK;
 
+    @Autowired
+    ApplicationResponseService applicationResponseService;
+
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<Object> handleAllExceptions(final Exception ex, final HttpServletRequest request) {
+    public final GenericResponseEntity handleAllExceptions(final Exception ex, final HttpServletRequest request) {
         log.error("Exception : " + stackTraceToString(ex));
 
         String errorMessage = ex.getMessage();
         String errorCode = "INGESTION_SERVICES_ERROR";
-        ResponseEntity errorResponse = null;
+        GenericResponseEntity errorResponse = null;
         if (ex instanceof DataIntegrityViolationException) {
             if (ex.getCause() instanceof ConstraintViolationException) {
                 ConstraintViolationException exDetail = (ConstraintViolationException) ex.getCause();
@@ -64,7 +70,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 errorMessage = dex.getCause().getMessage();
             }
         }
-        errorResponse = buildExceptionResponse(errorCode, errorMessage, HTTP_ERROR_STATUS);
+        errorResponse = buildGenericExceptionResponse(errorCode, errorMessage, HTTP_ERROR_STATUS);
 
         //log exception here
         ex.printStackTrace();
@@ -73,7 +79,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler(TransactionSystemException.class)
-    protected ResponseEntity<Object> handleTransactionException(TransactionSystemException ex) throws Throwable {
+    protected GenericResponseEntity handleTransactionException(TransactionSystemException ex) throws Throwable {
         Throwable cause = ex.getCause();
         if (!(cause instanceof RollbackException)) {
             throw cause;
@@ -91,17 +97,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             ConstraintViolation<?> constraintViolation = iterator.next();
             messages.append(constraintViolation.getPropertyPath() + " : " + constraintViolation.getMessage() + '\n');
         }
-        return buildExceptionResponse("ERROR_TRANSACTION", messages.toString(), HTTP_ERROR_STATUS);
+        return buildGenericExceptionResponse("ERROR_TRANSACTION", messages.toString(), HTTP_ERROR_STATUS);
     }
 
-    private ResponseEntity<Object> buildExceptionResponse(String errorCode, String message,
-                                                          HttpStatus status) {
-        ExceptionResponseBean exceptionResponse = new ExceptionResponseBean();
-        exceptionResponse.setTimestamp(LocalDateTime.now());
-        exceptionResponse.setError(errorCode);
-        exceptionResponse.setMessage(message);
-        exceptionResponse.setStatus(status.value());
-        return new ResponseEntity<>(exceptionResponse, new HttpHeaders(), status);
+    private GenericResponseEntity buildGenericExceptionResponse(String errorCode, String message,
+        HttpStatus status) {
+        return applicationResponseService.genFailureResponse(message, "");
+
     }
 
 

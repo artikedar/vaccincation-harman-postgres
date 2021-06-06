@@ -1,35 +1,36 @@
 package com.harman.ebook.vaccination.covid.service;
 
+import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_BOOKED;
+
+import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
+import com.harman.ebook.vaccination.covid.domain.DashboardResponseVO;
+import com.harman.ebook.vaccination.covid.domain.EmpVaccAppointmentVO;
+import com.harman.ebook.vaccination.covid.domain.EmployeeDashboardVO;
+import com.harman.ebook.vaccination.covid.entity.EmployeeMaster;
+import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
+import com.harman.ebook.vaccination.covid.entity.Person;
+import com.harman.ebook.vaccination.covid.repository.EmpMasterRespository;
+import com.harman.ebook.vaccination.covid.repository.EmployeeVaccSchInfoRepository;
+import com.harman.ebook.vaccination.covid.repository.PersonRespository;
+import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
+import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
-import com.harman.ebook.vaccination.covid.domain.EmpVaccAppointmentVO;
-import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
-import com.harman.ebook.vaccination.covid.repository.EmployeeVaccSchInfoRepository;
-import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
-import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.harman.ebook.vaccination.covid.domain.EmployeeDashboardVO;
-import com.harman.ebook.vaccination.covid.entity.EmployeeMaster;
-import com.harman.ebook.vaccination.covid.entity.Person;
-import com.harman.ebook.vaccination.covid.repository.MasterEmpRespository;
-import com.harman.ebook.vaccination.covid.repository.PersonRespository;
 import org.springframework.util.ObjectUtils;
-
-import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_BOOKED;
 
 @Service
 public class EmployeeService {
     @Autowired
-    MasterEmpRespository emprepos;
+    EmpMasterRespository emprepos;
 
     @Autowired
     PersonRespository personRepository;
+
+    @Autowired
+    EmployeeService employeeService;
 
     @Autowired
     EmployeeVaccSchInfoRepository employeeVaccSchInfoRepository;
@@ -57,8 +58,12 @@ public class EmployeeService {
      * @return GenericResponseEnity - List of EmployeeDashboardVO
      */
     public GenericResponseEntity getEmployeeDashboardResponse(Integer empId) {
-        List<EmployeeDashboardVO> vo = getEmployeeDashboard(empId);
-        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, vo);
+        DashboardResponseVO dashboardresVO = new DashboardResponseVO();
+        EmployeeMaster employeeMaster = findByEmployeeId(empId);
+        List<EmployeeDashboardVO> employeeDashboardVOList = getEmployeeDashboard(empId);
+        dashboardresVO.setEmployeeMaster(employeeMaster);
+        dashboardresVO.setEmployeeDashboardVOS(employeeDashboardVOList);
+        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, dashboardresVO);
     }
 
     /**

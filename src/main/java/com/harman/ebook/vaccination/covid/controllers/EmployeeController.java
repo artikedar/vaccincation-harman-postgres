@@ -30,25 +30,8 @@ public class EmployeeController {
 	
 	@Autowired
 	EmployeeService empService;
-	
-	@Autowired
-	  ApplicationResponseService appResponseService;
-	
-	@GetMapping(value = "/api/emp/list")
-	public List<EmployeeMaster> getEmployee() {
-		System.out.println("inside controller");
-		//return "Hello";
-		return  empService.getEmployee();
-	}
-	
-	@GetMapping(value = "/api/emp/{id}")
-	public GenericResponseEntity getEmployeeById(@PathVariable (name = "id",required = true)Integer id) {
-		System.out.println("inside controller");
-		EmployeeMaster emp=empService.findByEmployeeId(id);
-		return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS,emp); 
-	}
 
-	/**
+		/**
 	 *
 	 * @param empId
 	 * @return list of person objects associated with empId

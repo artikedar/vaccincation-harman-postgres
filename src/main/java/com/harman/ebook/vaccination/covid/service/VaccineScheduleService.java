@@ -4,6 +4,7 @@ import com.harman.ebook.vaccination.covid.domain.AppointmentRequest;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
 import com.harman.ebook.vaccination.covid.entity.VaccineInventory;
 import com.harman.ebook.vaccination.covid.repository.EmployeeVaccSchInfoRepository;
+import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
 import javax.persistence.criteria.CriteriaBuilder.In;
@@ -30,6 +31,9 @@ public class VaccineScheduleService {
     @Autowired
     private VaccineInventoryService vaccineInventoryService;
 
+    @Autowired
+    private ApplicationResponseService applicationResponseService;
+
     /**
      * set the status appointment status to booked = 1
      * @param req : AppointmentRequest
@@ -40,7 +44,10 @@ public class VaccineScheduleService {
 
         //update the status to cancel for exsisting appointment
         for(Integer appointmentNo: req.getEmpVaccAppIds()){
-            cancelVaccine(appointmentNo);
+            boolean isCancel = cancelVaccine(appointmentNo);
+            if(!isCancel){
+               return applicationResponseService.genFailureResponse("Appointment not valid to cancel ","");
+            }
         }
         //schedule new appointment for all person in req payalod
         List<EmployeeVaccAppointmentInfo> appointmentInfoList = new ArrayList<>();
@@ -48,10 +55,12 @@ public class VaccineScheduleService {
             EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo = getEmpolyeeVaccSchInfo(req, personId, LOV_APP_STATUS_BOOKED, Boolean.TRUE);
             appointmentInfoList.add(employeeVaccAppointmentInfo);
         }
-        employeeVaccSchInfoRepository.saveAll(appointmentInfoList);
+        appointmentInfoList = employeeVaccSchInfoRepository.saveAll(appointmentInfoList);
 
         //update slots into vaccine inventory
-        vaccineInventoryService.updateDoseAvailability(req);
+        for( EmployeeVaccAppointmentInfo appInfo:appointmentInfoList) {
+            vaccineInventoryService.updateDoseAvailability(appInfo);
+        }
 
         //return the dashbaord response vo
         return employeeService.getEmployeeDashboardResponse(req.getEmpMasterId());
@@ -64,7 +73,11 @@ public class VaccineScheduleService {
      */
     @Transactional
     public GenericResponseEntity cancelScheduledVaccine(Integer appointmentId,Integer empMasterId) {
-        cancelVaccine(appointmentId);
+
+        boolean isCancel = cancelVaccine(appointmentId);
+        if(!isCancel){
+           return applicationResponseService.genFailureResponse("Appointment not valid to cancel ","");
+        }
         return employeeService.getEmployeeDashboardResponse(empMasterId);
     }
 
@@ -76,9 +89,14 @@ public class VaccineScheduleService {
     @Transactional
     public boolean cancelVaccine(Integer appointmentId ) {
         EmployeeVaccAppointmentInfo appointmentInfo = employeeVaccSchInfoRepository.findById(appointmentId).orElse(null);
+       // check if appointment present or not booked
+        if(ObjectUtils.isEmpty(appointmentInfo) ||
+            appointmentInfo.getStatus().shortValue()!=LOV_APP_STATUS_BOOKED){
+            return false;
+        }
         if(!ObjectUtils.isEmpty(appointmentInfo)){
             appointmentInfo.setStatus(LOV_APP_STATUS_CANCELED);
-            employeeVaccSchInfoRepository.save(appointmentInfo);
+            appointmentInfo = employeeVaccSchInfoRepository.save(appointmentInfo);
 
             //update slots into vaccine inventory
             vaccineInventoryService.updateDoseAvailability(appointmentInfo);

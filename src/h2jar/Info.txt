@@ -1,5 +1,5 @@
 Execute Jar
- java -Dspring.profiles.active=h2 -jar vaccination-drive-0.0.5-SNAPSHOT-h2.jar
+6 java -Dspring.profiles.active=h2 -jar vaccination-drive-0.0.6-SNAPSHOT-h2.jar
 http://localhost:17002/harman/vaccination/v1/api/auth/employee/26370?doj=2020-12-01
 http://localhost:17002/harman/vaccination/v1/api/employee/1/dashboard
 

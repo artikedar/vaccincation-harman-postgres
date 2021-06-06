@@ -21,9 +21,9 @@ spring:
             default-page-size:  50
     datasource:
         driverClassName: org.postgresql.Driver
-        password: HarmanV@#12
+        password: ENC(96gDrUEuna2dCwsPiXnf0Tj8VTUWvRR1)
         url: jdbc:postgresql://10.55.165.85:5432/harmanvac?currentSchema=covid&stringtype=unspecified
-        username: vacadmin
+        username: ENC(fVnWTIJuBkHNQ9EApc1hsvz4PlU0y8f/)
     jpa:
         hibernate:
             naming:

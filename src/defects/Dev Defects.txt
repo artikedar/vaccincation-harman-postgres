@@ -1,10 +1,14 @@
 /**********************************UI Defects***********************************************/
 #1 June 07 : URL change for dev server --> ?
 #2 June 07 : Appointment is already booked message not shown in UI -->
-
+#3 June 07 : show confirmation for cancellation
+#4 June 07 : Slot info not updated as per services response
+#5 June 07 : No available doeses not shown in UI for a date
+#6 June 07 : Next week does not shown in ui. Calender controll available
 
 /**********************************Services Defects***********************************************/
 #1 June 07 : Session does not expire  --> Arti --> Inprogress
 #2 June O7 : Pwd encryption for profile --> Amar --> Inprogress
 #3 June 07 : Use https
-#2 June 07 : Appointment schedule does not wotk --> bhagwat --> Inprogress
+#4 June 07 : Appointment schedule does not wotk --> bhagwat --> Inprogress
+#5 June 07 : No of available doses not sent to UI

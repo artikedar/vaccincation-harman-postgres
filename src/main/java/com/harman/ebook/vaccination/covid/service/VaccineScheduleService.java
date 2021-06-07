@@ -2,6 +2,7 @@ package com.harman.ebook.vaccination.covid.service;
 
 import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_BOOKED;
 import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_CANCELED;
+import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_COMPLETED;
 
 import com.harman.ebook.vaccination.covid.domain.AppointmentRequest;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
@@ -46,13 +47,19 @@ public class VaccineScheduleService {
                return applicationResponseService.genFailureResponse("Appointment not valid to cancel ","");
             }
         }
+
+        // check if person already has booking
+        for(Integer personId : req.getPersonIds()) {
+            boolean isValidBooking = validateBooking(personId);
+            if (!isValidBooking) {
+                return applicationResponseService
+                    .genFailureResponse("Please review booked appointments ", "");
+            }
+        }
+
         //schedule new appointment for all person in req payalod
         List<EmployeeVaccAppointmentInfo> appointmentInfoList = new ArrayList<>();
         for(Integer personId : req.getPersonIds()) {
-            boolean isValidBooking = validateBooking(personId);
-            if(!isValidBooking){
-                return applicationResponseService.genFailureResponse("Please review booked appointments ","");
-            }
             EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo = getEmpolyeeVaccSchInfo(req, personId, LOV_APP_STATUS_BOOKED, Boolean.TRUE);
             appointmentInfoList.add(employeeVaccAppointmentInfo);
         }
@@ -114,9 +121,15 @@ public class VaccineScheduleService {
         boolean isBookingValid = false;
         EmployeeVaccAppointmentInfo appointmentInfo = employeeVaccSchInfoRepository.findEmployeeVaccAppointmentInfoByPersonIdAndStatus(personId, LOV_APP_STATUS_BOOKED);
 
-        if(ObjectUtils.isEmpty(appointmentInfo) ||
-            appointmentInfo.getStatus().shortValue()==LOV_APP_STATUS_BOOKED){
+        if(ObjectUtils.isEmpty(appointmentInfo)){
             isBookingValid = true;
+        }else{
+            if( appointmentInfo.getStatus().shortValue()==LOV_APP_STATUS_BOOKED ||
+            appointmentInfo.getStatus().shortValue()==LOV_APP_STATUS_COMPLETED){
+                isBookingValid = false;
+            }else if (appointmentInfo.getStatus().shortValue()==LOV_APP_STATUS_CANCELED ) {
+                isBookingValid = true;
+            }
         }
         return isBookingValid;
     }

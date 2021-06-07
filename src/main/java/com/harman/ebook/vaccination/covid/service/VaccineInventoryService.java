@@ -107,9 +107,9 @@ public class VaccineInventoryService {
     public void updateDoseAvailability(EmployeeVaccAppointmentInfo appInfo) {
 
         //fetch VaccineInventory according to employeeVaccAppointmentInfo
-        Date dateOfVac =  DateUtil.getUIDateFormat(appInfo.getDateOfVaccination());
+        Date dateOfvac = appInfo.getDateOfVaccination();
         VaccineInventory vaccineInventory = vaccineInventoryRepository.findVaccineInventoryByVacTypeAndLocationAndDateOfAvailability(appInfo.getVacType(), appInfo.getLocation(),
-            dateOfVac);
+            dateOfvac);
         Integer noOfAvailableDoses = vaccineInventory.getNoOfAvailableDoses().intValue();
         Integer noOfBookedDoses = vaccineInventory.getNoOfBookedDoses().intValue();
 

@@ -111,12 +111,12 @@ public class VaccineScheduleService {
 
     @Transactional
     public boolean validateBooking(Integer personId ) {
-        boolean isBookingValid = true;
+        boolean isBookingValid = false;
         EmployeeVaccAppointmentInfo appointmentInfo = employeeVaccSchInfoRepository.findEmployeeVaccAppointmentInfoByPersonIdAndStatus(personId, LOV_APP_STATUS_BOOKED);
 
         if(ObjectUtils.isEmpty(appointmentInfo) ||
             appointmentInfo.getStatus().shortValue()==LOV_APP_STATUS_BOOKED){
-            isBookingValid = false;
+            isBookingValid = true;
         }
         return isBookingValid;
     }

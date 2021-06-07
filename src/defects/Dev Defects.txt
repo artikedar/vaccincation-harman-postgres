@@ -1,9 +1,10 @@
 /**********************************UI Defects***********************************************/
-1 June 07 : URL change for dev server --> ?
-
+#1 June 07 : URL change for dev server --> ?
+#2 June 07 : Appointment is already booked message not shown in UI -->
 
 
 /**********************************Services Defects***********************************************/
 #1 June 07 : Session does not expire  --> Arti --> Inprogress
 #2 June O7 : Pwd encryption for profile --> Amar --> Inprogress
 #3 June 07 : Use https
+#2 June 07 : Appointment schedule does not wotk --> bhagwat --> Inprogress

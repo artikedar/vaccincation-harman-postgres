@@ -40,14 +40,13 @@ public class DateUtil {
 
     /**
      * convert NPD date to UI date
-     * @param dateStr
      * @return
      */
     public static Date getUIDateFormat(Date date){
-        Date uiDate = null;
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
-        uiDate = getDate(formatter.format(date));
-        return uiDate;
+        String newFormatDate = formatter.format(date);
+        return  formatDate(newFormatDate);
+
     }
 
     /**

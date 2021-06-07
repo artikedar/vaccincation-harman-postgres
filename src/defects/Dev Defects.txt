@@ -6,7 +6,7 @@
 #5 June 07 : No available doeses not shown in UI for a date
 #6 June 07 : Next week does not shown in ui. Calender controll available
 #7 June 07 : On successful scheduling, after the pop up, booked date and slot should get updated. Also the no of doses should get reduced accordingly.
-#8 June 07 : The days in the slots should be sequential.
+
 #9 June 07 : If the appointment is not valid, and user clicks on cancel, then proper msg should be returned in the pop up
 #10 June 07 : reschedule / cancel should not be available for next day appoinment
 
@@ -18,3 +18,4 @@
 
 /**********************************Services Defects Fixed***********************************************/
 #1 June 07 : No of available doses not sent to UI --> Fixed by Arti
+#8 June 07 : The days in the slots should be sequential. --> Fixed by Arti

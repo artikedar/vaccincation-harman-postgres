@@ -57,7 +57,6 @@ public class VaccineCalendarService {
             vaccineCalendarVO.setNoOfBookedDoses(vacInv.getNoOfBookedDoses());
             List<SlotInfo> slotInfoList = slotInfoRepository.findSlotInfosByVacInvId(vacInv.getVacInvId());
             List<SlotInfoVO> slotInfoVOList = new ArrayList<>();
-            BeanUtils.copyProperties(slotInfoList, slotInfoVOList);
             for(SlotInfo slotInfo : slotInfoList) {
                 SlotInfoVO slotInfoVO = getSlotInfoVO(slotInfo);
                 slotInfoVOList.add(slotInfoVO);

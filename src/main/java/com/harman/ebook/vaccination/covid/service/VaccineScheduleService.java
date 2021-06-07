@@ -40,6 +40,12 @@ public class VaccineScheduleService {
     @Transactional
     public GenericResponseEntity scheduleVaccine(AppointmentRequest req) {
 
+        //check number of booking count
+        boolean isValidBookingCount = checkValidBookingCount(req);
+        if(!isValidBookingCount) {
+            return applicationResponseService.genFailureResponse("No sufficient slots available","");
+        }
+
         //update the status to cancel for exsisting appointment
         for(Integer appointmentNo: req.getEmpVaccAppIds()){
             boolean isCancel = cancelVaccine(appointmentNo);
@@ -73,8 +79,6 @@ public class VaccineScheduleService {
         //return the dashbaord response vo
         return employeeService.getEmployeeDashboardResponse(req.getEmpMasterId());
     }
-
-
 
     /**
      * set the status appointment status to booked = 1
@@ -146,5 +150,9 @@ public class VaccineScheduleService {
         Short dose = 1;
         employeeVaccAppointmentInfo.setDoseLevel(dose);
         return employeeVaccAppointmentInfo;
+    }
+
+    private Boolean checkValidBookingCount(AppointmentRequest req) {
+        return vaccineInventoryService.checkValidBookingCount(req);
     }
 }

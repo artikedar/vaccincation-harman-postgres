@@ -14,9 +14,11 @@ import com.harman.ebook.vaccination.covid.repository.VaccineInventoryRepository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
@@ -143,6 +145,22 @@ public class VaccineInventoryService {
         slotInfoToBeModified.setNoOfBookedDoses(noOfBookedDosesForSlot.shortValue());
         slotInfoToBeModified.setNoOfAvailableDoses(noOfAvailableDosesForSlot.shortValue());
         slotInfoRepository.save(slotInfoToBeModified);
+    }
+
+    public Boolean checkValidBookingCount(AppointmentRequest req) {
+        Date bookingDate = DateUtil.getDate(req.getBookingDate());
+        VaccineInventory vaccineInventory = vaccineInventoryRepository.findVaccineInventoryByVacTypeAndLocationAndDateOfAvailability(req.getVacType(), req.getLocation(),
+                bookingDate);
+        if(!ObjectUtils.isEmpty(vaccineInventory)) {
+            SlotInfo slotAvailable = slotInfoRepository.findSlotInfosByVacInvIdAndSlotNo(vaccineInventory.getVacInvId(), req.getSlotNo());
+            if(!ObjectUtils.isEmpty(slotAvailable)) {
+                if(slotAvailable.getSlotNo() >= req.getPersonIds().size()) {
+                    return Boolean.TRUE;
+                }
+            }
+        }
+        return Boolean.FALSE;
+
     }
 }
 

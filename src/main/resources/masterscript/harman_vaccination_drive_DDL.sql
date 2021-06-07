@@ -1,8 +1,8 @@
 DROP SCHEMA IF EXISTS covid cascade;
-CREATE SCHEMA covid AUTHORIZATION postgres;
-GRANT ALL PRIVILEGES ON ALL TABLES IN schema covid TO postgres;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA covid TO postgres;
-GRANT ALL PRIVILEGES ON DATABASE harmanvac TO postgres;
+CREATE SCHEMA covid AUTHORIZATION vacadmin;
+GRANT ALL PRIVILEGES ON ALL TABLES IN schema covid TO vacadmin;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA covid TO vacadmin;
+GRANT ALL PRIVILEGES ON DATABASE harmanvac TO vacadmin;
 
 CREATE SEQUENCE covid.hibernate_sequence ;
 DROP TABLE IF EXISTS covid.revinfo;
@@ -12,7 +12,7 @@ CREATE TABLE covid.revinfo(
         revtstmp bigint,
         CONSTRAINT revinfo_pkey PRIMARY KEY (rev)
 );
-GRANT all ON table covid.revinfo TO postgres;
+GRANT all ON table covid.revinfo TO vacadmin;
 
 /*employee master*/
 DROP TABLE IF EXISTS covid.employee_master;

@@ -8,6 +8,7 @@
 #7 June 07 : On successful scheduling, after the pop up, booked date and slot should get updated. Also the no of doses should get reduced accordingly.
 #8 June 07 : The days in the slots should be sequential.
 #9 June 07 : If the appointment is not valid, and user clicks on cancel, then proper msg should be returned in the pop up
+#10 June 07 : reschedule / cancel should not be available for next day appoinment
 
 /**********************************Services Defects***********************************************/
 #1 June 07 : Session does not expire  --> Arti --> Inprogress

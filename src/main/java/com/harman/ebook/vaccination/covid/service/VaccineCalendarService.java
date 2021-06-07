@@ -15,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.harman.ebook.vaccination.covid.constants.VaccinationConstants.NEXT_DAYS;
 
@@ -43,7 +41,7 @@ public class VaccineCalendarService {
     public GenericResponseEntity getVaccineCalendarVO(String fromDateString, Short location) throws ParseException {
         Date fromDate = DateUtil.getDate(fromDateString);
         Date tillDate = DateUtil.getNextDate(fromDate, NEXT_DAYS);
-        List<VaccineInventory> vaccineInventoryList = vaccineInventoryRepository.findByLocationAndDateOfAvailabilityBetweenAndIsActive(location, fromDate, tillDate, true);
+        List<VaccineInventory> vaccineInventoryList = vaccineInventoryRepository.findByLocationAndDateOfAvailabilityBetweenAndIsActiveAndOrderByDateOfAvailability(location, fromDate, tillDate, true);
         return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, getVaccineCalendarVO(vaccineInventoryList));
     }
 
@@ -67,6 +65,13 @@ public class VaccineCalendarService {
             vaccineCalendarVO.setSlotInfoList(slotInfoVOList);
             voList.add(vaccineCalendarVO);
         };
+        voList.stream().sorted();
+        Collections.sort(voList,new Comparator<VaccineCalendarVO>() {
+            @Override
+            public int compare(VaccineCalendarVO s1, VaccineCalendarVO s2) {
+                return s1.getDateOfAvailability().compareToIgnoreCase(s2.getDateOfAvailability());
+            }
+        });
         return voList;
     }
 

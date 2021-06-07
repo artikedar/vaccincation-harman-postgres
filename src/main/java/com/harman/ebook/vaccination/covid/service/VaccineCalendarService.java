@@ -55,13 +55,29 @@ public class VaccineCalendarService {
             vaccineCalendarVO.setLocation(vacInv.getLocation());
             vaccineCalendarVO.setNoOfDoses(vacInv.getTotalNoOfDoses());
             vaccineCalendarVO.setDateOfAvailability(DateUtil.getDateString(vacInv.getDateOfAvailability()));
-            vaccineCalendarVO.setNoOfDoses(vacInv.getTotalNoOfDoses());
+            vaccineCalendarVO.setNoOfAvailableDoses(vacInv.getNoOfAvailableDoses());
+            vaccineCalendarVO.setNoOfBookedDoses(vacInv.getNoOfBookedDoses());
             List<SlotInfo> slotInfoList = slotInfoRepository.findSlotInfosByVacInvId(vacInv.getVacInvId());
             List<SlotInfoVO> slotInfoVOList = new ArrayList<>();
-            BeanUtils.copyProperties(slotInfoVOList, slotInfoList);
+            BeanUtils.copyProperties(slotInfoList, slotInfoVOList);
+            for(SlotInfo slotInfo : slotInfoList) {
+                SlotInfoVO slotInfoVO = getSlotInfoVO(slotInfo);
+                slotInfoVOList.add(slotInfoVO);
+            }
             vaccineCalendarVO.setSlotInfoList(slotInfoVOList);
             voList.add(vaccineCalendarVO);
         };
         return voList;
+    }
+
+    private SlotInfoVO getSlotInfoVO(SlotInfo slotInfo) {
+        SlotInfoVO slotInfoVO = new SlotInfoVO();
+        slotInfoVO.setSlotInfoId(slotInfo.getSlotInfoId());
+        slotInfoVO.setSlotNo(slotInfo.getSlotNo());
+        slotInfoVO.setLocation(slotInfo.getLocation());
+        slotInfoVO.setNoOfAvailableDoses(slotInfo.getNoOfAvailableDoses());
+        slotInfoVO.setTotalNoOfDoses(slotInfo.getTotalNoOfDoses());
+        slotInfoVO.setNoOfBookedDoses(slotInfo.getNoOfBookedDoses());
+        return slotInfoVO;
     }
 }

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,13 @@ public class VaccineCalendarVO implements Serializable {
 
     @JsonProperty("noOfDoses")
     private Short noOfDoses;
+
+    @JsonProperty("noOfBookedDoses")
+    private Short noOfBookedDoses;
+
+    @JsonProperty("noOfAvailableDoses")
+    private Short noOfAvailableDoses;
+
 
     @JsonProperty("location")
     private Short location;

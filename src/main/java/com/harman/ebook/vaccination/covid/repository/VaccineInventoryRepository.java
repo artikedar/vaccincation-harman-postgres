@@ -13,8 +13,8 @@ import com.harman.ebook.vaccination.covid.entity.VaccineInventory;
 @RepositoryRestResource(collectionResourceRel = "vaccineInventory", path = "vaccine_inventory")
 public interface VaccineInventoryRepository extends JpaRepository<VaccineInventory, Integer>{
 
-	@Query("select vacInv from VaccineInventory vacInv where vacInv.location = :location and vacInv.dateOfAvailability >= :fromDate and vacInv.dateOfAvailability <= :tillDate and vacInv.isactive = :isActive")
-	List<VaccineInventory> findByLocationAndDateOfAvailabilityBetweenAndIsActiveAndOrderByDateOfAvailability(Short location,Date fromDate,Date tillDate, Boolean isActive);
+	@Query("select vacInv from VaccineInventory vacInv where vacInv.location = :location and vacInv.dateOfAvailability >= :fromDate and vacInv.dateOfAvailability <= :tillDate and vacInv.isactive = :isActive order by vacInv.dateOfAvailability")
+	List<VaccineInventory> findByLocationAndDateOfAvailabilityBetweenAndIsActive(Short location,Date fromDate,Date tillDate, Boolean isActive);
 
 	VaccineInventory findVaccineInventoryByVacTypeAndLocationAndDateOfAvailability(Short vacType, Short location, Date dateOfAvailability);
 

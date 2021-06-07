@@ -13,4 +13,6 @@ public interface SlotInfoRepository extends JpaRepository<SlotInfo, Integer>{
     SlotInfo findSlotInfosByVacInvIdAndSlotNo(Integer vacInvId, Short slotNo);
 
     List<SlotInfo> findSlotInfosByVacInvId(Integer vacInvId);
+    List<SlotInfo> findSlotInfosByVacInvIdOrderBySlotNoAsc(Integer vacInvId);
+
 }

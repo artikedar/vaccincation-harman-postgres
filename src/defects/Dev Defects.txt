@@ -1,0 +1,9 @@
+/**********************************UI Defects***********************************************/
+1 June 07 : URL change for dev server --> ?
+
+
+
+/**********************************Services Defects***********************************************/
+#1 June 07 : Session does not expire  --> Arti --> Inprogress
+#2 June O7 : Pwd encryption for profile --> Amar --> Inprogress
+#3 June 07 : Use https

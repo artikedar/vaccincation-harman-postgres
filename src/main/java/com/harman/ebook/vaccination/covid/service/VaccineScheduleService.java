@@ -1,23 +1,20 @@
 package com.harman.ebook.vaccination.covid.service;
 
+import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_BOOKED;
+import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_CANCELED;
+
 import com.harman.ebook.vaccination.covid.domain.AppointmentRequest;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
-import com.harman.ebook.vaccination.covid.entity.VaccineInventory;
 import com.harman.ebook.vaccination.covid.repository.EmployeeVaccSchInfoRepository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
-import javax.persistence.criteria.CriteriaBuilder.In;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import javax.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
-import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_BOOKED;
-import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_CANCELED;
 
 @Service
 public class VaccineScheduleService {
@@ -52,6 +49,10 @@ public class VaccineScheduleService {
         //schedule new appointment for all person in req payalod
         List<EmployeeVaccAppointmentInfo> appointmentInfoList = new ArrayList<>();
         for(Integer personId : req.getPersonIds()) {
+            boolean isValidBooking = validateBooking(personId);
+            if(!isValidBooking){
+                return applicationResponseService.genFailureResponse("Please review booked appointments ","");
+            }
             EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo = getEmpolyeeVaccSchInfo(req, personId, LOV_APP_STATUS_BOOKED, Boolean.TRUE);
             appointmentInfoList.add(employeeVaccAppointmentInfo);
         }
@@ -65,6 +66,8 @@ public class VaccineScheduleService {
         //return the dashbaord response vo
         return employeeService.getEmployeeDashboardResponse(req.getEmpMasterId());
     }
+
+
 
     /**
      * set the status appointment status to booked = 1
@@ -104,6 +107,18 @@ public class VaccineScheduleService {
             return true;
         }
         return false;
+    }
+
+    @Transactional
+    public boolean validateBooking(Integer personId ) {
+        boolean isBookingValid = true;
+        EmployeeVaccAppointmentInfo appointmentInfo = employeeVaccSchInfoRepository.findEmployeeVaccAppointmentInfoByPersonIdAndStatus(personId, LOV_APP_STATUS_BOOKED);
+
+        if(ObjectUtils.isEmpty(appointmentInfo) ||
+            appointmentInfo.getStatus().shortValue()==LOV_APP_STATUS_BOOKED){
+            isBookingValid = false;
+        }
+        return isBookingValid;
     }
 
     private EmployeeVaccAppointmentInfo getEmpolyeeVaccSchInfo(AppointmentRequest req, Integer personId, Short status, Boolean bookingStatus) {

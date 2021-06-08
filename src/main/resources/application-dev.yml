@@ -22,7 +22,7 @@ spring:
     datasource:
         driverClassName: org.postgresql.Driver
         password: HarmanV@#12
-#        url: jdbc:postgresql://10.55.165.85:5432/harmanvac?currentSchema=covid&stringtype=unspecified
+ #       url: jdbc:postgresql://10.55.165.85:5432/harmanvac?currentSchema=covid&stringtype=unspecified
         url: jdbc:postgresql://localhost:5432/harmanvac?currentSchema=covid&stringtype=unspecified
         username: vacadmin
     jpa:
@@ -49,6 +49,9 @@ spring:
             file-size-threshold: 2KB
             max-file-size: 500MB
             max-request-size: 500MB
+    session:
+      timeout:
+        seconds: 30
 applicationmode: dev
 threadPool:
   maxPoolSize: 5

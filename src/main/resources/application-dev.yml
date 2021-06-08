@@ -22,8 +22,8 @@ spring:
     datasource:
         driverClassName: org.postgresql.Driver
         password: HarmanV@#12
- #       url: jdbc:postgresql://10.55.165.85:5432/harmanvac?currentSchema=covid&stringtype=unspecified
-        url: jdbc:postgresql://localhost:5432/harmanvac?currentSchema=covid&stringtype=unspecified
+        url: jdbc:postgresql://10.55.165.85:5432/harmanvac?currentSchema=covid&stringtype=unspecified
+#        url: jdbc:postgresql://localhost:5432/harmanvac?currentSchema=covid&stringtype=unspecified
         username: vacadmin
     jpa:
         hibernate:

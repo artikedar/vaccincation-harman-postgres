@@ -23,4 +23,7 @@ public interface VaccineInventoryRepository extends JpaRepository<VaccineInvento
 	VaccineInventory getVaccineInventoryByVacTypeLocationDOAvailability(@Param("vacType") Short vacType,
 																		@Param("location") Short location,
 																		@Param("dateOfAvailability") String dateOfAvailability);
+
+	List<VaccineInventory> findByLocation(Short location);
+
 }

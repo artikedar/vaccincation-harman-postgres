@@ -17,6 +17,9 @@ public class EmpVaccAppointmentVO {
     @JsonProperty("slotNo")
     private Short slotNo;
 
+    @JsonProperty("location")
+    private Short location;
+
     @JsonProperty("empVaccAppId")
     private Integer empVaccAppId;
 

@@ -55,7 +55,7 @@ public class VaccineCalendarService {
             vaccineCalendarVO.setDateOfAvailability(DateUtil.getDateString(vacInv.getDateOfAvailability()));
             vaccineCalendarVO.setNoOfAvailableDoses(vacInv.getNoOfAvailableDoses());
             vaccineCalendarVO.setNoOfBookedDoses(vacInv.getNoOfBookedDoses());
-            List<SlotInfo> slotInfoList = slotInfoRepository.findSlotInfosByVacInvId(vacInv.getVacInvId());
+            List<SlotInfo> slotInfoList = slotInfoRepository.findSlotInfosByVacInvIdOrderBySlotNoAsc(vacInv.getVacInvId());
             List<SlotInfoVO> slotInfoVOList = new ArrayList<>();
             for(SlotInfo slotInfo : slotInfoList) {
                 SlotInfoVO slotInfoVO = getSlotInfoVO(slotInfo);

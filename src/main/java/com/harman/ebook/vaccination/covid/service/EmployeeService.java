@@ -104,6 +104,7 @@ public class EmployeeService {
            empVaccAppointmentVO.setSlotNo(employeeVaccAppointmentInfo.getSlotNo());
            empVaccAppointmentVO
                .setDateOfVaccination(DateUtil.getDateString(employeeVaccAppointmentInfo.getDateOfVaccination()));
+           empVaccAppointmentVO.setLocation(employeeVaccAppointmentInfo.getLocation());
        }
 
         return empVaccAppointmentVO;

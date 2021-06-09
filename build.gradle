@@ -16,6 +16,11 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-data-rest:2.2.0.RELEASE'
 	compile 'org.springframework.data:spring-data-rest-hal-explorer:3.2.0.RELEASE'
 	runtime 'org.springframework.boot:spring-boot-devtools:2.2.0.RELEASE'
+	// https://mvnrepository.com/artifact/org.springframework.session/spring-session-core
+	implementation group: 'org.springframework.session', name: 'spring-session-core', version: '2.2.6.RELEASE'
+// https://mvnrepository.com/artifact/org.springframework.session/spring-session-jdbc
+	implementation group: 'org.springframework.session', name: 'spring-session-jdbc', version: '2.5.0'
+
 	compile group: 'org.hibernate', name: 'hibernate-envers', version: '5.4.10.Final'
 	compile group: 'org.hibernate', name: 'hibernate-ehcache', version: '5.4.10.Final'
 	compile 'com.vladmihalcea:hibernate-types-52:2.7.1'

@@ -19,6 +19,12 @@ spring:
         rest:
             basePath: /harman/vaccination/v1
             default-page-size:  50
+    session:
+      store-type: jdbc
+      jdbc:
+        initialize-schema: always
+      timeout:
+        seconds: 180
     datasource:
         driverClassName: org.postgresql.Driver
         password: ENC(Xm1YsOXmqfesO75f7sRgD/QZUFLRkEd3)

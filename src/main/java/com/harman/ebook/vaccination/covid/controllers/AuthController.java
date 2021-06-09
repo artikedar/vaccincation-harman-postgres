@@ -39,8 +39,8 @@ public class AuthController {
 	@GetMapping("/api/auth/employee/{empId}")
 	public GenericResponseEntity validateSignIn (
 			@PathVariable (name="empId",required = true)Integer empId,
-			@RequestParam(name="doj",required = true) String doj)throws Exception {
-		return  authService.validateUser(empId,doj);
+			@RequestParam(name="doj",required = true) String doj, HttpServletRequest request)throws Exception {
+		return  authService.validateUser(empId,doj, request);
 	}
 
 	@GetMapping("/api/auth/logout")

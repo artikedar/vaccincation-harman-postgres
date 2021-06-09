@@ -48,9 +48,9 @@ public class AuthService {
       String strDate = empInfo.getDateOfJoining().toString().substring(0, 10);
       Date dbDoj = DateUtil.formatDate(strDate);
       if (!ObjectUtils.isEmpty(reqDoj) && reqDoj.equals(dbDoj)) {
-        HttpSession session = request.getSession(true);
-        session.setMaxInactiveInterval(190);
-        session.setAttribute("EMPLOYEE_ID", empId);
+//        HttpSession session = request.getSession(true);
+//        session.setMaxInactiveInterval(190);
+//        session.setAttribute("EMPLOYEE_ID", empId);
         return employeeService.getEmployeeDashboardResponse(empInfo.getEmpMasterId());
       }
     }

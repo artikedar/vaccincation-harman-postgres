@@ -9,6 +9,7 @@ package com.harman.ebook.vaccination.covid.exceptions;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import java.util.Iterator;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.RollbackException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
@@ -22,6 +23,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.NonTransientDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -101,6 +103,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status) {
         return applicationResponseService.genFailureResponse(message, "");
 
+    }
+
+    @ExceptionHandler({EntityNotFoundException.class})
+    public GenericResponseEntity handleEntityNotException(final Exception exception, final HttpServletRequest request) {
+        return buildGenericExceptionResponse("ERROR_RECORD_NOTFOUND", exception.getMessage(), HTTP_ERROR_STATUS);
     }
 
 

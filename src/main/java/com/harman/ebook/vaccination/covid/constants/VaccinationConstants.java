@@ -25,4 +25,6 @@ public final class VaccinationConstants {
   public static final Short SLOT = 4;
   public static final Short NO_OF_SLOTS = 6;
   public static final int NEXT_DAYS = 14;
+  public static final String SESSION_EXPIRED = "User Session Expired!";
+  public static final String USER_NOT_LOGGED_IN = "User not logged in";
 }

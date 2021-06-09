@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Service
 public class AuthService {
 
@@ -29,10 +32,11 @@ public class AuthService {
   /**
    * @param empId
    * @param doj
+   * @param request
    * @return
    * @throws Exception
    */
-  public GenericResponseEntity validateUser(Integer empId, String doj) {
+  public GenericResponseEntity validateUser(Integer empId, String doj, HttpServletRequest request) {
     Date reqDoj = null;
 
     reqDoj = DateUtil.formatDate(doj);
@@ -44,6 +48,9 @@ public class AuthService {
       String strDate = empInfo.getDateOfJoining().toString().substring(0, 10);
       Date dbDoj = DateUtil.formatDate(strDate);
       if (!ObjectUtils.isEmpty(reqDoj) && reqDoj.equals(dbDoj)) {
+        HttpSession session = request.getSession(true);
+        session.setMaxInactiveInterval(190);
+        session.setAttribute("EMPLOYEE_ID", empId);
         return employeeService.getEmployeeDashboardResponse(empInfo.getEmpMasterId());
       }
     }

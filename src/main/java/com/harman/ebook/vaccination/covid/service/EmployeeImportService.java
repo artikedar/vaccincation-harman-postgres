@@ -1,5 +1,6 @@
 package com.harman.ebook.vaccination.covid.service;
 
+import com.harman.ebook.vaccination.covid.csvparser.CSVParser;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,8 @@ public class EmployeeImportService {
    * @return
    */
   public GenericResponseEntity importSupplier(MultipartFile file, Boolean isDependant) {
+    CSVParser  csvParser = new CSVParser();
+    csvParser.parseFile(file);
         return appResponseService.genSuccessResponse("","file Imported Sucessfully ");
   }
 

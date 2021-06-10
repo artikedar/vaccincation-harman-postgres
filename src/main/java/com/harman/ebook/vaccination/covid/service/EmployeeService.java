@@ -131,16 +131,19 @@ public class EmployeeService {
         Integer empId) {
         Person person = personRepository.findById(personDTO.getPersonId()).orElse(null);
         if(!ObjectUtils.isEmpty(person)){
-            if(!ObjectUtils.isEmpty(personDTO.getCowinid())){
+           // if(!ObjectUtils.isEmpty(personDTO.getCowinid())){
                 person.setCowinid(personDTO.getCowinid());
-            }
-            if(!ObjectUtils.isEmpty(personDTO.getManipalid())){
+            //}
+            //if(!ObjectUtils.isEmpty(personDTO.getManipalid())){
                 person.setManipalid(personDTO.getManipalid());
-            }
+           // }
             if(!ObjectUtils.isEmpty(personDTO.getCowinid()) &&
                 !ObjectUtils.isEmpty(personDTO.getManipalid())){
                 person.setIsRegistered(true);
+            }else {
+                person.setIsRegistered(false);
             }
+            person.setDateOfDoseI(personDTO.getDateOfDoseI());
             personRepository.save(person);
         }
 

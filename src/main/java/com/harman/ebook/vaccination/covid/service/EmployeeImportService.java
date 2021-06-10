@@ -1,6 +1,8 @@
 package com.harman.ebook.vaccination.covid.service;
 
 import com.harman.ebook.vaccination.covid.csvparser.CSVParser;
+import com.harman.ebook.vaccination.covid.repository.EmpMasterRespository;
+import com.harman.ebook.vaccination.covid.repository.PersonRespository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,12 @@ public class EmployeeImportService {
   @Autowired
   ApplicationResponseService appResponseService;
 
+  @Autowired
+  EmpMasterRespository empMasterRespository;
+
+  @Autowired
+  PersonRespository personRespository;
+
   /**
    *
    * @param file
@@ -29,7 +37,13 @@ public class EmployeeImportService {
   public GenericResponseEntity importSupplier(MultipartFile file, Boolean isDependant) {
     CSVParser  csvParser = new CSVParser();
     csvParser.parseFile(file);
-        return appResponseService.genSuccessResponse("","file Imported Sucessfully ");
+//    if (isDependant)
+//        return appResponseService.genSuccessResponse("",empMasterRespository.findAll());
+//    else
+//      return appResponseService.genSuccessResponse("",personRespository.findAll());
+
+        return appResponseService.genSuccessResponse("","data imported successfully");
+
   }
 
   /**

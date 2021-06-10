@@ -43,15 +43,9 @@ public class EmployeeMaster extends BaseEntity {
 	  private Integer employeeId;
 
 	  @Column(name = "dateOfjoining")
-	  @Temporal(TemporalType.TIMESTAMP)
+	  @Temporal(TemporalType.DATE)
 	  private Date dateOfJoining;
 
-	  @Column(name="grade")
-	  private String grade;
-
-	  @Column(name="workplacelocation")
-	  private String workplaceLocation;
-	  
 	  @Column(name="employmenttype")
 	  private Short employmenttype;
 

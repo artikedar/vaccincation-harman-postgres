@@ -54,3 +54,8 @@ threadPool:
   corePoolSize: 5
   queueCapacity: 50
   awaitTerminationSec: 120
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG

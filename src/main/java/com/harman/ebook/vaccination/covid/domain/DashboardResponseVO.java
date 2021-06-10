@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString
 
 public class DashboardResponseVO {
-  EmployeeMaster employeeMaster;
+  EmployeeVO employeeMaster;
   List<EmployeeDashboardVO> employeeDashboardVOS;
 
 }

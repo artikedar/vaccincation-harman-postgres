@@ -20,27 +20,17 @@ public class EmployeeDashboardVO {
     @JsonProperty("fullName")
     private String fullName;
 
-    @JsonProperty("personAge")
-    private Short personAge;
+    @JsonProperty("cowinid")
+    private String cowinid;
 
-    @JsonProperty("isDoseI")
-    private Boolean  isDoseI;
+    @JsonProperty("manipalid")
+    private String manipalid;
+
+    @JsonProperty("isRegistered")
+    private Boolean isRegistered;
 
     @JsonProperty("dateOfDoseI")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date dateOfDoseI;
-
-    @JsonProperty("isDoseII")
-    private Boolean isDoseII;
-
-    @JsonProperty("dateOfDoseII")
-    private Date dateOfDoseII;
-
-    @JsonProperty("vacType")
-    private Short vacType;
-
-    @JsonProperty("location")
-    private Short location;
 
     @JsonProperty("empMasterId")
     private Integer empMasterId;

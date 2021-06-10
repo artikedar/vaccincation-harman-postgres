@@ -6,6 +6,8 @@ import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
 import com.harman.ebook.vaccination.covid.domain.DashboardResponseVO;
 import com.harman.ebook.vaccination.covid.domain.EmpVaccAppointmentVO;
 import com.harman.ebook.vaccination.covid.domain.EmployeeDashboardVO;
+import com.harman.ebook.vaccination.covid.domain.EmployeeVO;
+import com.harman.ebook.vaccination.covid.domain.PersonRegisterDTO;
 import com.harman.ebook.vaccination.covid.entity.EmployeeMaster;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
 import com.harman.ebook.vaccination.covid.entity.Person;
@@ -17,7 +19,9 @@ import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -36,6 +40,9 @@ public class EmployeeService {
     EmployeeVaccSchInfoRepository employeeVaccSchInfoRepository;
 
     @Autowired
+    EmployeeService employeeService;
+
+    @Autowired
     private ApplicationResponseService appResponseService;
 
     public List<EmployeeMaster> getEmployee() {
@@ -52,7 +59,9 @@ public class EmployeeService {
         DashboardResponseVO dashboardresVO = new DashboardResponseVO();
         EmployeeMaster employeeMaster = empMasterRespository.findById(empId).orElseThrow(null);
         List<EmployeeDashboardVO> employeeDashboardVOList = getEmployeeDashboard(empId);
-        dashboardresVO.setEmployeeMaster(employeeMaster);
+        EmployeeVO employeeVO = new EmployeeVO();
+        BeanUtils.copyProperties(employeeMaster,employeeVO);
+        dashboardresVO.setEmployeeMaster(employeeVO);
         dashboardresVO.setEmployeeDashboardVOS(employeeDashboardVOList);
         return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, dashboardresVO);
     }
@@ -80,13 +89,15 @@ public class EmployeeService {
         employeeDashboardVO.setPersonId(person.getPersonId());
         employeeDashboardVO.setEmpMasterId(person.getEmpMasterId());
         employeeDashboardVO.setFullName(person.getFullName());
-        employeeDashboardVO.setLocation(person.getLocation());
-        employeeDashboardVO.setDateOfDoseI(person.getDateOfDoseI());
-        employeeDashboardVO.setDateOfDoseII(person.getDateOfDoseII());
-        employeeDashboardVO.setIsDoseI(person.getIsDoseI());
-        employeeDashboardVO.setIsDoseII(person.getIsDoseII());
-        employeeDashboardVO.setVacType(person.getVacType());
-        employeeDashboardVO.setPersonAge(person.getPersonAge());
+        employeeDashboardVO.setCowinid(person.getCowinid());
+        employeeDashboardVO.setManipalid(person.getManipalid());
+        employeeDashboardVO.setDateOfDoseI (person.getDateOfDoseI());
+        if(ObjectUtils.isEmpty(person.getCowinid()) ||
+            ObjectUtils.isEmpty(person.getManipalid())){
+            employeeDashboardVO.setIsRegistered(false);
+        }else {
+            employeeDashboardVO.setIsRegistered(true);
+        }
         employeeDashboardVO.setEmpVaccAppointmentVO(getEmpVaccAppointmentVO(person.getPersonId()));
         return employeeDashboardVO;
     }
@@ -108,5 +119,31 @@ public class EmployeeService {
        }
 
         return empVaccAppointmentVO;
+    }
+
+    /**
+     *
+     * @param personDTO
+     * @param empId
+     * @return
+     */
+    public GenericResponseEntity registerEmployee(PersonRegisterDTO personDTO,
+        Integer empId) {
+        Person person = personRepository.findById(personDTO.getPersonId()).orElse(null);
+        if(!ObjectUtils.isEmpty(person)){
+            if(!ObjectUtils.isEmpty(personDTO.getCowinid())){
+                person.setCowinid(personDTO.getCowinid());
+            }
+            if(!ObjectUtils.isEmpty(personDTO.getManipalid())){
+                person.setManipalid(personDTO.getManipalid());
+            }
+            if(!ObjectUtils.isEmpty(personDTO.getCowinid()) &&
+                !ObjectUtils.isEmpty(personDTO.getManipalid())){
+                person.setIsRegistered(true);
+            }
+            personRepository.save(person);
+        }
+
+        return employeeService.getEmployeeDashboardResponse(empId);
     }
 }

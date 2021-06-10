@@ -1,5 +1,6 @@
 package com.harman.ebook.vaccination.covid.controllers;
 
+import com.harman.ebook.vaccination.covid.domain.PersonRegisterDTO;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,6 +42,19 @@ public class EmployeeController {
 	@GetMapping(value = "/api/employee/{empId}/dashboard")
 	public GenericResponseEntity getEmployeeDashboard(@PathVariable(name = "empId",required = true)Integer empId) {
 		return empService.getEmployeeDashboardResponse(empId);
+	}
+
+
+	/**
+	 *
+	 * @param personRegisterDTO
+	 * @return
+	 */
+	@PostMapping(value = "/api/employee/{empId}/register")
+	public GenericResponseEntity registerEmployee(
+			@PathVariable(name = "empId",required = true)Integer empId,
+			@RequestBody PersonRegisterDTO personRegisterDTO) {
+		return empService.registerEmployee(personRegisterDTO,empId);
 	}
 
 }

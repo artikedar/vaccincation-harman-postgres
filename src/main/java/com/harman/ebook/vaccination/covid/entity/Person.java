@@ -36,44 +36,21 @@ public class Person extends BaseEntity implements Serializable{
 	  @Column(name="fullName")
 	  private String fullName;
 
-	  @Column(name="personAge")
-	  private Short personAge;
+		@Column(name="manipalid")
+		private String manipalid;
 
-	  @Column(name="gender")
-	  private Short gender;
+		@Column(name="cowinid")
+		private String cowinid;
 
-	  @Column(name="isDoseI", nullable=false,updatable = false, insertable=false)
-	  private Boolean  isDoseI;
+	  @Column(name="isRegistered")
+	  private Boolean isRegistered;
 
 	  @Column(name = "dateOfDoseI")
-	  @Temporal(TemporalType.TIMESTAMP)
+	  @Temporal(TemporalType.DATE)
 	  private Date dateOfDoseI;
-
-	  @Column(name="isDoseII", nullable=false,updatable = false, insertable=false)
-	  private Boolean isDoseII;
-
-	  @Column(name = "dateOfDoseII")
-	  @Temporal(TemporalType.TIMESTAMP)
-	  private Date dateOfDoseII;
 
 	  @Column(name = "vacType", nullable = false)
 	  private Short vacType;
-
-	  @Column(name="emailId")
-	  private String emailId;
-
-	  @Column(name="country")
-	  private String country;
-
-	  @Column(name = "dateOfBirth")
-	  @Temporal(TemporalType.TIMESTAMP)
-	  private Date dateOfBirth;
-
-	  @Column(name = "grade")
-	  private String grade;
-
-	  @Column(name="location")
-	  private Short location;
 
 	  @Column(name = "empmasterid")
 	  private Integer empMasterId;

@@ -154,7 +154,7 @@ public class VaccineInventoryService {
         if(!ObjectUtils.isEmpty(vaccineInventory)) {
             SlotInfo slotAvailable = slotInfoRepository.findSlotInfosByVacInvIdAndSlotNo(vaccineInventory.getVacInvId(), req.getSlotNo());
             if(!ObjectUtils.isEmpty(slotAvailable)) {
-                if(slotAvailable.getSlotNo() >= req.getPersonIds().size()) {
+                if(slotAvailable.getNoOfAvailableDoses() >= req.getPersonIds().size()) {
                     return Boolean.TRUE;
                 }
             }

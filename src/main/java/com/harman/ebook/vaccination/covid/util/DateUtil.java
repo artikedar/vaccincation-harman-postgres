@@ -1,6 +1,8 @@
 package com.harman.ebook.vaccination.covid.util;
 
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
+import java.sql.Timestamp;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.ParseException;
@@ -14,6 +16,12 @@ public class DateUtil {
 
     @Autowired
     ApplicationResponseService applicationResponseService;
+
+    public final static long SECOND_MILLIS = 1000;
+    public final static long MINUTE_MILLIS = SECOND_MILLIS * 60;
+    public final static long HOUR_MILLIS = MINUTE_MILLIS * 60;
+    public final static long DAY_MILLIS = HOUR_MILLIS * 24;
+
     /**
      * get next date of a date
      * @param fromDate
@@ -71,5 +79,17 @@ public class DateUtil {
             e.printStackTrace();
         }
         return date;
+    }
+
+    /**
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    public static int daysDiff(Timestamp startDate, Timestamp endDate) {
+        if (ObjectUtils.isEmpty(startDate) || ObjectUtils.isEmpty(endDate)) return 0;
+
+        return (int) ((endDate.getTime() / DAY_MILLIS) - (startDate.getTime() / DAY_MILLIS));
     }
 }

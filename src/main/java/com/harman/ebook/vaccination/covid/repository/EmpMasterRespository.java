@@ -11,5 +11,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  */
 @RepositoryRestResource(collectionResourceRel = "employeemaster", path = "employeemaster")
 public interface EmpMasterRespository extends JpaRepository<EmployeeMaster, Integer> {
-	EmployeeMaster findByEmployeeId(Integer employeeId);
+	EmployeeMaster findByEmployeeId(String employeeId);
 }

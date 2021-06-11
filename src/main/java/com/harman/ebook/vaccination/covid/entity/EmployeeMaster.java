@@ -40,7 +40,7 @@ public class EmployeeMaster extends BaseEntity {
 	  private Integer empMasterId;
 
 	  @Column(name = "empid", nullable = false)
-	  private Integer employeeId;
+	  private String employeeId;
 
 	  @Column(name = "dateOfjoining")
 	  @Temporal(TemporalType.DATE)

@@ -36,7 +36,7 @@ public class AuthService {
    * @return
    * @throws Exception
    */
-  public GenericResponseEntity validateUser(Integer empId, String doj, HttpServletRequest request) {
+  public GenericResponseEntity validateUser(String empId, String doj, HttpServletRequest request) {
     Date reqDoj = null;
 
     reqDoj = DateUtil.formatDate(doj);

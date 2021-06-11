@@ -22,7 +22,7 @@ public class EmployeeVO {
   private Integer empMasterId;
 
   @JsonProperty("employeeId")
-  private Integer employeeId;
+  private String employeeId;
 
   @JsonProperty("fullname")
   private String fullname;

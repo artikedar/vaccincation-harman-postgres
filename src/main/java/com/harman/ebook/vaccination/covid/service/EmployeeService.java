@@ -72,7 +72,7 @@ public class EmployeeService {
      * @return List of EmployeeDashboardVO
      */
     public List<EmployeeDashboardVO> getEmployeeDashboard(Integer empId) {
-        List<Person> person = personRepository.findPersonByEmpMasterId(empId);
+        List<Person> person = personRepository.findPersonByEmpMasterIdOrderByPersonId(empId);
         return getEmployeeDashboardVOList(person);
     }
 

@@ -16,5 +16,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(collectionResourceRel = "person", path = "person")
 public interface PersonRespository extends JpaRepository<Person, Integer> {
 	List<Person> findPersonByEmpMasterId(Integer empId);
+	List<Person> findPersonByEmpMasterIdOrderByPersonId(Integer empId);
+
 
 }

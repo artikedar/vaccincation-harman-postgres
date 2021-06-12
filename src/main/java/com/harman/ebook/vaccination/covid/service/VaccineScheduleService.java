@@ -3,7 +3,7 @@ package com.harman.ebook.vaccination.covid.service;
 import com.harman.ebook.vaccination.covid.domain.AppointmentRequest;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
 import com.harman.ebook.vaccination.covid.entity.Person;
-import com.harman.ebook.vaccination.covid.repository.EmployeeVaccSchInfoRepository;
+import com.harman.ebook.vaccination.covid.repository.EmployeeVaccAppointmentInfoRepository;
 import com.harman.ebook.vaccination.covid.repository.PersonRespository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
@@ -23,7 +23,7 @@ import static com.harman.ebook.vaccination.covid.constants.LovConstants.*;
 public class VaccineScheduleService {
 
     @Autowired
-    private EmployeeVaccSchInfoRepository employeeVaccSchInfoRepository;
+    private EmployeeVaccAppointmentInfoRepository employeeVaccSchInfoRepository;
 
     @Autowired
     private EmployeeService employeeService;

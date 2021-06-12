@@ -5,12 +5,14 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
 
+import java.util.Date;
 import java.util.List;
 
 
 @RepositoryRestResource(collectionResourceRel = "employeeVaccSchInfo", path = "employee_vacc_sch_info")
-public interface EmployeeVaccSchInfoRepository extends JpaRepository<EmployeeVaccAppointmentInfo, Integer> {
+public interface EmployeeVaccAppointmentInfoRepository extends JpaRepository<EmployeeVaccAppointmentInfo, Integer> {
 
     EmployeeVaccAppointmentInfo findEmployeeVaccAppointmentInfoByPersonIdAndStatus(Integer personId, Short status);
 
+    List<EmployeeVaccAppointmentInfo> findEmployeeVaccAppointmentInfosByLocationAndDateOfVaccinationAndStatus(Short location, Date bookingDate, Short status);
 }

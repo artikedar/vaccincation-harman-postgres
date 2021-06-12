@@ -12,7 +12,7 @@ import com.harman.ebook.vaccination.covid.entity.EmployeeMaster;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
 import com.harman.ebook.vaccination.covid.entity.Person;
 import com.harman.ebook.vaccination.covid.repository.EmpMasterRespository;
-import com.harman.ebook.vaccination.covid.repository.EmployeeVaccSchInfoRepository;
+import com.harman.ebook.vaccination.covid.repository.EmployeeVaccAppointmentInfoRepository;
 import com.harman.ebook.vaccination.covid.repository.PersonRespository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -37,7 +36,7 @@ public class EmployeeService {
     EmpMasterRespository empMasterRespository;
 
     @Autowired
-    EmployeeVaccSchInfoRepository employeeVaccSchInfoRepository;
+    EmployeeVaccAppointmentInfoRepository employeeVaccSchInfoRepository;
 
     @Autowired
     EmployeeService employeeService;

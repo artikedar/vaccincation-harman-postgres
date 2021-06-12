@@ -42,9 +42,9 @@ public class EmployeeMaster extends BaseEntity {
 	  @Column(name = "empid", nullable = false)
 	  private String employeeId;
 
-	  @Column(name = "dateOfjoining")
+	  @Column(name = "dob")
 	  @Temporal(TemporalType.DATE)
-	  private Date dateOfJoining;
+	  private Date dob;
 
 	  @Column(name="employmenttype")
 	  private Short employmenttype;

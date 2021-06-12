@@ -45,7 +45,7 @@ public class AuthService {
     }
     EmployeeMaster empInfo = empMasterRespository.findByEmployeeId(empId);
     if (null != empInfo && empInfo.getIsactive()) {
-      String strDate = empInfo.getDateOfJoining().toString().substring(0, 10);
+      String strDate = empInfo.getDob().toString().substring(0, 10);
       Date dbDoj = DateUtil.formatDate(strDate);
       if (!ObjectUtils.isEmpty(reqDoj) && reqDoj.equals(dbDoj)) {
 //        HttpSession session = request.getSession(true);

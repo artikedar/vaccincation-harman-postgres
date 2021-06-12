@@ -1,21 +1,23 @@
 package com.harman.ebook.vaccination.covid.service;
 
-import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_BOOKED;
-import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_CANCELED;
-import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_COMPLETED;
-
 import com.harman.ebook.vaccination.covid.domain.AppointmentRequest;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
+import com.harman.ebook.vaccination.covid.entity.Person;
 import com.harman.ebook.vaccination.covid.repository.EmployeeVaccSchInfoRepository;
+import com.harman.ebook.vaccination.covid.repository.PersonRespository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
-import java.util.ArrayList;
-import java.util.List;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static com.harman.ebook.vaccination.covid.constants.LovConstants.*;
 
 @Service
 public class VaccineScheduleService {
@@ -32,22 +34,25 @@ public class VaccineScheduleService {
     @Autowired
     private ApplicationResponseService applicationResponseService;
 
+    @Autowired
+    private PersonRespository personRespository;
+
     /**
      * set the status appointment status to booked = 1
-     * @param req : AppointmentRequest
+     * @param appointmentRequest : AppointmentRequest
      * @return returns List<EmployeeDashboardVO> as response
      */
     @Transactional
-    public GenericResponseEntity scheduleVaccine(AppointmentRequest req) {
+    public GenericResponseEntity scheduleVaccine(AppointmentRequest appointmentRequest) {
 
         //check number of booking count
-        boolean isValidBookingCount = checkValidBookingCount(req);
+        boolean isValidBookingCount = checkValidBookingCount(appointmentRequest);
         if(!isValidBookingCount) {
             return applicationResponseService.genFailureResponse("No sufficient slots available","");
         }
 
         //update the status to cancel for exsisting appointment
-        for(Integer appointmentNo: req.getEmpVaccAppIds()){
+        for(Integer appointmentNo: appointmentRequest.getEmpVaccAppIds()){
             boolean isCancel = cancelVaccine(appointmentNo);
             if(!isCancel){
                return applicationResponseService.genFailureResponse("Appointment not valid to cancel ","");
@@ -55,18 +60,29 @@ public class VaccineScheduleService {
         }
 
         // check if person already has booking
-        for(Integer personId : req.getPersonIds()) {
+        for(Integer personId : appointmentRequest.getPersonIds()) {
             boolean isValidBooking = validateBooking(personId);
             if (!isValidBooking) {
                 return applicationResponseService
                     .genFailureResponse("Please review booked appointments ", "");
             }
+
+            Person person = personRespository.findById(personId).orElse(null);
+            if (ObjectUtils.isEmpty(person)) {
+                return applicationResponseService
+                        .genFailureResponse("Person with id " + personId + " does not exists.", personId);
+            }
+            boolean isValidSecondDose = validateSecondDosePeriod(person, appointmentRequest.getBookingDate());
+            if (!isValidSecondDose) {
+                return applicationResponseService
+                        .genFailureResponse("Gap between two doses of vaccine should not be less than 84 days.", "");
+            }
         }
 
         //schedule new appointment for all person in req payalod
         List<EmployeeVaccAppointmentInfo> appointmentInfoList = new ArrayList<>();
-        for(Integer personId : req.getPersonIds()) {
-            EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo = getEmpolyeeVaccSchInfo(req, personId, LOV_APP_STATUS_BOOKED, Boolean.TRUE);
+        for(Integer personId : appointmentRequest.getPersonIds()) {
+            EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo = getEmpolyeeVaccSchInfo(appointmentRequest, personId, LOV_APP_STATUS_BOOKED, Boolean.TRUE);
             appointmentInfoList.add(employeeVaccAppointmentInfo);
         }
         appointmentInfoList = employeeVaccSchInfoRepository.saveAll(appointmentInfoList);
@@ -77,13 +93,27 @@ public class VaccineScheduleService {
         }
 
         //return the dashbaord response vo
-        return employeeService.getEmployeeDashboardResponse(req.getEmpMasterId());
+        return employeeService.getEmployeeDashboardResponse(appointmentRequest.getEmpMasterId());
+    }
+
+    private boolean validateSecondDosePeriod(Person person, String bookingDate) {
+        Date dateOfDoseI = person.getDateOfDoseI();
+        if (ObjectUtils.isEmpty(dateOfDoseI)) {
+            return true;
+        }
+        Date appBookingDt = DateUtil.getDate(bookingDate);
+        System.out.println("Days Diff between two doses for Person : " + person.getPersonId() + ", " + person.getFullName() + " is " + DateUtil.daysDiff(appBookingDt, dateOfDoseI));
+        if (DateUtil.daysDiff(appBookingDt, dateOfDoseI) < 84) {
+            return false;
+        }
+        return true;
     }
 
     /**
      * set the status appointment status to booked = 1
-     * @param req : AppointmentRequest
-     * @return returns List<EmployeeDashboardVO> as response
+     * @param appointmentId
+     * @param empMasterId
+     * @return
      */
     @Transactional
     public GenericResponseEntity cancelScheduledVaccine(Integer appointmentId,Integer empMasterId) {
@@ -97,8 +127,8 @@ public class VaccineScheduleService {
 
     /**
      * set the status appointment status to cancelled = 2
-     * @param req
-     * @return returns List<EmployeeDashboardVO> as response
+     * @param appointmentId
+     * @return
      */
     @Transactional
     public boolean cancelVaccine(Integer appointmentId ) {

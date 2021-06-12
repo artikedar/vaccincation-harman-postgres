@@ -92,4 +92,9 @@ public class DateUtil {
 
         return (int) ((endDate.getTime() / DAY_MILLIS) - (startDate.getTime() / DAY_MILLIS));
     }
+
+    public static long daysDiff(Date toDate, Date fromDate) {
+        long difference_In_Time = toDate.getTime() - fromDate.getTime();
+        return (difference_In_Time / (1000 * 60 * 60 * 24)) % 365;
+    }
 }

@@ -47,8 +47,4 @@ public interface LovRepository extends JpaRepository<Lov, Integer> {
     @QueryHints(value = {@QueryHint(name = org.hibernate.jpa.QueryHints.HINT_CACHEABLE, value = "true")})
     Lov findBylovid(@Param("lovId") Integer lovId);
 
-    @Query(value = "SELECT il FROM Lov il WHERE lower(il.value) NOT IN ('integer','float') and  il.lovtypeid= 10 and il.isActive=true")
-    List<Lov> findOnBoardingDataTypes();
-
-    List<Lov> findBylovtypeid(Short lovTypeStatus);
 }

@@ -43,6 +43,18 @@ public class AuthController {
 		return  authService.validateUser(empId,doj, request);
 	}
 
+	/**
+	 *
+	 * @param empId
+	 * @return
+	 * @throws Exception
+	 */
+	@GetMapping("/api/auth/employee/{empId}/dashboard")
+	public GenericResponseEntity validateSignIn (
+			@PathVariable (name="empId")Integer empId)throws Exception {
+		return  authService.getDashboard(empId);
+	}
+
 	@GetMapping("/api/auth/logout")
 	public String destroySession(HttpServletRequest request) {
 		request.getSession().invalidate();

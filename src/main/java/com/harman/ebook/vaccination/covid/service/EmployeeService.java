@@ -91,8 +91,7 @@ public class EmployeeService {
         employeeDashboardVO.setCowinid(person.getCowinid());
         employeeDashboardVO.setManipalid(person.getManipalid());
         employeeDashboardVO.setDateOfDoseI (person.getDateOfDoseI());
-        if(ObjectUtils.isEmpty(person.getCowinid()) ||
-            ObjectUtils.isEmpty(person.getManipalid())){
+        if(ObjectUtils.isEmpty(person.getCowinid()) ){
             employeeDashboardVO.setIsRegistered(false);
         }else {
             employeeDashboardVO.setIsRegistered(true);

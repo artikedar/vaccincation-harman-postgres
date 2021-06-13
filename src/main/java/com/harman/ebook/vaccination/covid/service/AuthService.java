@@ -57,4 +57,13 @@ public class AuthService {
     return appResponseService.genFailureResponse(VaccinationConstants.INVALID_USER, null);
 
   }
+
+  /**
+   *
+   * @param empId
+   * @return
+   */
+  public GenericResponseEntity getDashboard(Integer empId) {
+    return employeeService.getEmployeeDashboardResponse(empId);
+  }
 }

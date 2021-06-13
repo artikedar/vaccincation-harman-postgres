@@ -19,7 +19,7 @@ public class EmployeeReportVO {
     private Short location;
 
     @JsonProperty("dateOfVaccination")
-    private Date dateOfVaccination;
+    private String dateOfVaccination;
 
     @JsonProperty("personList")
     private List<PersonAppointmentVO> personList;

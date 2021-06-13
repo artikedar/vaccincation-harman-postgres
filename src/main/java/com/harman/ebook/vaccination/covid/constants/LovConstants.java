@@ -17,4 +17,5 @@ public final class LovConstants {
   public static final Short LOV_APP_STATUS_RESCHEDULED = 3;
   public static final Short LOV_APP_STATUS_COMPLETED = 4;
   public static final Short LOV_TYPE_STATUS = 4;
+  public static final Short LOV_TYPE_LOCATION = 1;
 }

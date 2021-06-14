@@ -3,11 +3,7 @@ package com.harman.ebook.vaccination.covid.service;
 import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_BOOKED;
 
 import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
-import com.harman.ebook.vaccination.covid.domain.DashboardResponseVO;
-import com.harman.ebook.vaccination.covid.domain.EmpVaccAppointmentVO;
-import com.harman.ebook.vaccination.covid.domain.EmployeeDashboardVO;
-import com.harman.ebook.vaccination.covid.domain.EmployeeVO;
-import com.harman.ebook.vaccination.covid.domain.PersonRegisterDTO;
+import com.harman.ebook.vaccination.covid.domain.*;
 import com.harman.ebook.vaccination.covid.entity.EmployeeMaster;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
 import com.harman.ebook.vaccination.covid.entity.Person;
@@ -22,6 +18,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 @Service
@@ -146,5 +143,29 @@ public class EmployeeService {
         }
 
         return employeeService.getEmployeeDashboardResponse(empId);
+    }
+
+    public GenericResponseEntity getEmployeeDependents(Integer empMasterId) {
+        List<Person> personList = personRepository.findPersonByEmpMasterId(empMasterId);
+        if(CollectionUtils.isEmpty(personList)) {
+            return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, "No dependents found");
+        }
+        EmployeeDependentVO employeeDependentVO = new EmployeeDependentVO();
+        employeeDependentVO.setEmpMasterId(empMasterId);
+        List<DependentVO> dependentVOList = new ArrayList<>();
+        for(Person person : personList) {
+            DependentVO dependentVO = new DependentVO();
+            dependentVO.setFullName(person.getFullName());
+            dependentVO.setPersonId(person.getPersonId());
+            if(!ObjectUtils.isEmpty(person.getDateOfDoseI())) {
+                dependentVO.setDateOfVaccination(DateUtil.getDateString(person.getDateOfDoseI()));
+            }
+            dependentVO.setCowinId(person.getCowinid());
+            dependentVO.setManipalId(person.getManipalid());
+            dependentVO.setVacType(person.getVacType());
+            dependentVOList.add(dependentVO);
+        }
+        employeeDependentVO.setDependents(dependentVOList);
+        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, employeeDependentVO);
     }
 }

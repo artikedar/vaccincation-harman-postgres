@@ -370,7 +370,6 @@ INSERT INTO covid.lov_type VALUES (6, 'AppointmentStatus', 'Appointment Status',
 
 INSERT INTO covid.lov VALUES (1, 1, '1', 1, 'PUNE', true);
 INSERT INTO covid.lov VALUES (2, 1, '2', 2, 'BANGLORE', true);
-INSERT INTO covid.lov VALUES (3, 1, '3', 3, 'GURGAON', true);
 INSERT INTO covid.lov VALUES (4, 2, '1', 1, 'Dose-1', true);
 INSERT INTO covid.lov VALUES (5, 2, '2', 2, 'Dose-2', true);
 INSERT INTO covid.lov VALUES (6, 3, '1', 1, 'Covaxin', true);

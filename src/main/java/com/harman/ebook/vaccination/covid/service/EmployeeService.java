@@ -1,14 +1,14 @@
 package com.harman.ebook.vaccination.covid.service;
 
-import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_APP_STATUS_BOOKED;
-
 import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
 import com.harman.ebook.vaccination.covid.domain.*;
 import com.harman.ebook.vaccination.covid.entity.EmployeeMaster;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
+import com.harman.ebook.vaccination.covid.entity.Lov;
 import com.harman.ebook.vaccination.covid.entity.Person;
 import com.harman.ebook.vaccination.covid.repository.EmpMasterRespository;
 import com.harman.ebook.vaccination.covid.repository.EmployeeVaccAppointmentInfoRepository;
+import com.harman.ebook.vaccination.covid.repository.LovRepository;
 import com.harman.ebook.vaccination.covid.repository.PersonRespository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+
+import static com.harman.ebook.vaccination.covid.constants.LovConstants.*;
 
 @Service
 public class EmployeeService {
@@ -40,6 +42,9 @@ public class EmployeeService {
 
     @Autowired
     private ApplicationResponseService appResponseService;
+
+    @Autowired
+    private LovRepository lovRepository;
 
     public List<EmployeeMaster> getEmployee() {
         return emprepos.findAll();
@@ -167,5 +172,49 @@ public class EmployeeService {
         }
         employeeDependentVO.setDependents(dependentVOList);
         return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, employeeDependentVO);
+    }
+
+    public GenericResponseEntity getEmployeeAppointments(Integer empMasterId) {
+        EmployeeMaster employeeMaster = empMasterRespository.findByEmployeeId(String.valueOf(empMasterId));
+        List<Person> personList = new ArrayList<>();
+        if(!ObjectUtils.isEmpty(employeeMaster)) {
+            personList  = personRepository.findPersonByEmpMasterId(employeeMaster.getEmpMasterId());
+        }
+        EmployeeScheduledAppointmentVO employeeScheduledAppointmentVO = new EmployeeScheduledAppointmentVO();
+        employeeScheduledAppointmentVO.setEmpMasterId(empMasterId);
+        List<AppointmentVO> appointmentVoList = new ArrayList<>();
+
+        List<Lov> lovList = lovRepository.getLovByLovtypeIdIsActive(LOV_TYPE_STATUS, Boolean.TRUE);
+        List<Lov> lovLocationList = lovRepository.getLovByLovtypeIdIsActive(LOV_TYPE_LOCATION, Boolean.TRUE);
+        for(Person person : personList) {
+            AppointmentVO appointmentVO = new AppointmentVO();
+            appointmentVO.setCowinId(person.getCowinid());
+            appointmentVO.setFullName(person.getFullName());
+            appointmentVO.setManipalId(person.getManipalid());
+            appointmentVO.setPersonId(person.getPersonId());
+            EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo = employeeVaccSchInfoRepository.findEmployeeVaccAppointmentInfoByPersonIdAndStatus(person.getPersonId(), LOV_APP_STATUS_BOOKED);
+            appointmentVO.setEmpVaccAppId(employeeVaccAppointmentInfo.getEmpVaccAppId());
+            if(!ObjectUtils.isEmpty(employeeVaccAppointmentInfo.getDateOfVaccination())) {
+                appointmentVO.setDateOfVaccination(DateUtil.getDateString(employeeVaccAppointmentInfo.getDateOfVaccination()));
+            }
+            appointmentVO.setLocation(employeeVaccAppointmentInfo.getLocation());
+            appointmentVO.setSlotNo(employeeVaccAppointmentInfo.getSlotNo());
+            Lov lov = lovList.stream().filter(l -> l.getValueid() == employeeVaccAppointmentInfo.getSlotNo().intValue()).findFirst().orElse(null);
+            if (!ObjectUtils.isEmpty(lov)) {
+                appointmentVO.setSlotName(lov.getValue());
+            }
+
+            Lov lovLocation = lovLocationList.stream().filter(l -> l.getValueid() == employeeVaccAppointmentInfo.getLocation().intValue()).findFirst().orElse(null);
+            if (!ObjectUtils.isEmpty(lovLocation)) {
+                appointmentVO.setLocationName(lovLocation.getValue());
+            }
+            appointmentVO.setDoseLevel(employeeVaccAppointmentInfo.getDoseLevel());
+            appointmentVO.setIsBookingActive(employeeVaccAppointmentInfo.getIsBookingActive());
+            appointmentVO.setStatus(employeeVaccAppointmentInfo.getStatus());
+            appointmentVO.setVacType(employeeVaccAppointmentInfo.getVacType());
+            appointmentVoList.add(appointmentVO);
+        }
+        employeeScheduledAppointmentVO.setAppointments(appointmentVoList);
+        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, employeeScheduledAppointmentVO);
     }
 }

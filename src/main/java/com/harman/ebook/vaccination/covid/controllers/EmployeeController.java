@@ -56,4 +56,9 @@ public class EmployeeController {
 		return empService.getEmployeeDependents(empMasterId);
 	}
 
+	@GetMapping(value = "/api/vaccine/employee/appointments")
+	public GenericResponseEntity getEmployeeAppointments(@RequestParam(name = "empMasterId")Integer empMasterId) {
+		return empService.getEmployeeAppointments(empMasterId);
+	}
+
 }

@@ -65,3 +65,6 @@ threadPool:
   corePoolSize: 5
   queueCapacity: 50
   awaitTerminationSec: 120
+
+inventory:
+  saveupdate: false

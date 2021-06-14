@@ -16,6 +16,7 @@ import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -35,6 +36,9 @@ import static com.harman.ebook.vaccination.covid.constants.VaccinationConstants.
 @Service
 public class VaccineInventoryService {
 
+    @Value("${inventory.saveupdate}")
+    boolean saveUpdateEnabled;
+
     @Autowired
     private ApplicationResponseService appResponseService;
 
@@ -49,19 +53,22 @@ public class VaccineInventoryService {
 
     @Transactional
     public GenericResponseEntity insertIntoVaccineInventory(VaccineInventorySchedule vacInvSchedule) throws ParseException {
-        List<VaccineInventory> inventoryList = new ArrayList<>();
-        List<Lov> lovList = lovRepository.getLovByLovtypeIdIsActive(SLOT, true);
-        for (int i = 0; i < vacInvSchedule.getSchedule().size(); i++) {
-            Schedule schedule = vacInvSchedule.getSchedule().get(i);
-            VaccineInventory inventory = getVaccineInventory(vacInvSchedule, schedule);
-            inventoryList.add(inventory);
+        if (saveUpdateEnabled) {
+            List<VaccineInventory> inventoryList = new ArrayList<>();
+            List<Lov> lovList = lovRepository.getLovByLovtypeIdIsActive(SLOT, true);
+            for (int i = 0; i < vacInvSchedule.getSchedule().size(); i++) {
+                Schedule schedule = vacInvSchedule.getSchedule().get(i);
+                VaccineInventory inventory = getVaccineInventory(vacInvSchedule, schedule);
+                inventoryList.add(inventory);
+            }
+            List<VaccineInventory> savedInventoryList = vaccineInventoryRepository.saveAll(inventoryList);
+            for (VaccineInventory vacInv : savedInventoryList) {
+                List<SlotInfo> slotInfoList = getSlotInfoList(lovList, vacInv);
+                slotInfoRepository.saveAll(slotInfoList);
+            }
+            return appResponseService.genSuccessResponse(VaccinationConstants.SAVED_RECORDS, inventoryList.size());
         }
-        List<VaccineInventory> savedInventoryList = vaccineInventoryRepository.saveAll(inventoryList);
-        for (VaccineInventory vacInv : savedInventoryList) {
-            List<SlotInfo> slotInfoList = getSlotInfoList(lovList, vacInv);
-            slotInfoRepository.saveAll(slotInfoList);
-        }
-        return appResponseService.genSuccessResponse(VaccinationConstants.SAVED_RECORDS, inventoryList.size());
+        return appResponseService.genFailureResponse(INVEN_SAVE_RECORDS_DISABLED, vacInvSchedule);
     }
 
     private List<SlotInfo> getSlotInfoList(List<Lov> lovList, VaccineInventory inventory) {

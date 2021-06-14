@@ -56,3 +56,5 @@ threadPool:
   queueCapacity: 50
   awaitTerminationSec: 120
 
+inventory:
+  saveupdate: false

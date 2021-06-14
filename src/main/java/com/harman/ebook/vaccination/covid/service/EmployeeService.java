@@ -131,14 +131,9 @@ public class EmployeeService {
         Integer empId) {
         Person person = personRepository.findById(personDTO.getPersonId()).orElse(null);
         if(!ObjectUtils.isEmpty(person)){
-           // if(!ObjectUtils.isEmpty(personDTO.getCowinid())){
                 person.setCowinid(personDTO.getCowinid());
-            //}
-            //if(!ObjectUtils.isEmpty(personDTO.getManipalid())){
                 person.setManipalid(personDTO.getManipalid());
-           // }
-            if(!ObjectUtils.isEmpty(personDTO.getCowinid()) &&
-                !ObjectUtils.isEmpty(personDTO.getManipalid())){
+            if(!ObjectUtils.isEmpty(personDTO.getCowinid())){
                 person.setIsRegistered(true);
             }else {
                 person.setIsRegistered(false);
@@ -148,78 +143,5 @@ public class EmployeeService {
         }
 
         return employeeService.getEmployeeDashboardResponse(empId);
-    }
-
-    /**
-     *
-     * @param empId
-     * @return
-     */
-    public GenericResponseEntity getEmployeeDependents(String empId) {
-        List<Person> personList = personRepository.findPersonByEmpMasterId(1);
-        if(CollectionUtils.isEmpty(personList)) {
-            return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, "No dependents found");
-        }
-        EmployeeDependentVO employeeDependentVO = new EmployeeDependentVO();
-        employeeDependentVO.setEmpMasterId(1);
-        List<DependentVO> dependentVOList = new ArrayList<>();
-        for(Person person : personList) {
-            DependentVO dependentVO = new DependentVO();
-            dependentVO.setFullName(person.getFullName());
-            dependentVO.setPersonId(person.getPersonId());
-            if(!ObjectUtils.isEmpty(person.getDateOfDoseI())) {
-                dependentVO.setDateOfVaccination(DateUtil.getDateString(person.getDateOfDoseI()));
-            }
-            dependentVO.setCowinId(person.getCowinid());
-            dependentVO.setManipalId(person.getManipalid());
-            dependentVO.setVacType(person.getVacType());
-            dependentVOList.add(dependentVO);
-        }
-        employeeDependentVO.setDependents(dependentVOList);
-        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, employeeDependentVO);
-    }
-
-    public GenericResponseEntity getEmployeeAppointments(String empMasterId) {
-        EmployeeMaster employeeMaster = empMasterRespository.findByEmployeeId(empMasterId);
-        List<Person> personList = new ArrayList<>();
-        if(!ObjectUtils.isEmpty(employeeMaster)) {
-            personList  = personRepository.findPersonByEmpMasterId(employeeMaster.getEmpMasterId());
-        }
-        EmployeeScheduledAppointmentVO employeeScheduledAppointmentVO = new EmployeeScheduledAppointmentVO();
-        employeeScheduledAppointmentVO.setEmpMasterId(employeeMaster.getEmpMasterId());
-        List<AppointmentVO> appointmentVoList = new ArrayList<>();
-
-        List<Lov> lovList = lovRepository.getLovByLovtypeIdIsActive(LOV_TYPE_STATUS, Boolean.TRUE);
-        List<Lov> lovLocationList = lovRepository.getLovByLovtypeIdIsActive(LOV_TYPE_LOCATION, Boolean.TRUE);
-        for(Person person : personList) {
-            AppointmentVO appointmentVO = new AppointmentVO();
-            appointmentVO.setCowinid(person.getCowinid());
-            appointmentVO.setFullName(person.getFullName());
-            appointmentVO.setManipalid(person.getManipalid());
-            appointmentVO.setPersonId(person.getPersonId());
-            EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo = employeeVaccSchInfoRepository.findEmployeeVaccAppointmentInfoByPersonIdAndStatus(person.getPersonId(), LOV_APP_STATUS_BOOKED);
-            appointmentVO.setEmpVaccAppId(employeeVaccAppointmentInfo.getEmpVaccAppId());
-            if(!ObjectUtils.isEmpty(employeeVaccAppointmentInfo.getDateOfVaccination())) {
-                appointmentVO.setDateOfVaccination(DateUtil.getDateString(employeeVaccAppointmentInfo.getDateOfVaccination()));
-            }
-            appointmentVO.setLocation(employeeVaccAppointmentInfo.getLocation());
-            appointmentVO.setSlotNo(employeeVaccAppointmentInfo.getSlotNo());
-            Lov lov = lovList.stream().filter(l -> l.getValueid() == employeeVaccAppointmentInfo.getSlotNo().intValue()).findFirst().orElse(null);
-            if (!ObjectUtils.isEmpty(lov)) {
-                appointmentVO.setSlotName(lov.getValue());
-            }
-
-            Lov lovLocation = lovLocationList.stream().filter(l -> l.getValueid() == employeeVaccAppointmentInfo.getLocation().intValue()).findFirst().orElse(null);
-            if (!ObjectUtils.isEmpty(lovLocation)) {
-                appointmentVO.setLocationName(lovLocation.getValue());
-            }
-            appointmentVO.setDoseLevel(employeeVaccAppointmentInfo.getDoseLevel());
-            appointmentVO.setIsBookingActive(employeeVaccAppointmentInfo.getIsBookingActive());
-            appointmentVO.setStatus(employeeVaccAppointmentInfo.getStatus());
-            appointmentVO.setVacType(employeeVaccAppointmentInfo.getVacType());
-            appointmentVoList.add(appointmentVO);
-        }
-        employeeScheduledAppointmentVO.setAppointments(appointmentVoList);
-        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, employeeScheduledAppointmentVO);
     }
 }

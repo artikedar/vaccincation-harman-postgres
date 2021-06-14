@@ -18,11 +18,11 @@ public class DependentVO {
     @JsonProperty("fullName")
     private String fullName;
 
-    @JsonProperty("manipalId")
-    private String manipalId;
+    @JsonProperty("manipalid")
+    private String manipalid;
 
-    @JsonProperty("cowinId")
-    private String cowinId;
+    @JsonProperty("cowinid")
+    private String cowinid;
 
     @JsonProperty("dateOfVaccination")
     private String dateOfVaccination;

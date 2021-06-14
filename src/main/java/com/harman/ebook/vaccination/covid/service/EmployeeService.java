@@ -150,13 +150,18 @@ public class EmployeeService {
         return employeeService.getEmployeeDashboardResponse(empId);
     }
 
-    public GenericResponseEntity getEmployeeDependents(Integer empMasterId) {
-        List<Person> personList = personRepository.findPersonByEmpMasterId(empMasterId);
+    /**
+     *
+     * @param empId
+     * @return
+     */
+    public GenericResponseEntity getEmployeeDependents(String empId) {
+        List<Person> personList = personRepository.findPersonByEmpMasterId(1);
         if(CollectionUtils.isEmpty(personList)) {
             return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, "No dependents found");
         }
         EmployeeDependentVO employeeDependentVO = new EmployeeDependentVO();
-        employeeDependentVO.setEmpMasterId(empMasterId);
+        employeeDependentVO.setEmpMasterId(1);
         List<DependentVO> dependentVOList = new ArrayList<>();
         for(Person person : personList) {
             DependentVO dependentVO = new DependentVO();
@@ -174,14 +179,14 @@ public class EmployeeService {
         return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, employeeDependentVO);
     }
 
-    public GenericResponseEntity getEmployeeAppointments(Integer empMasterId) {
-        EmployeeMaster employeeMaster = empMasterRespository.findByEmployeeId(String.valueOf(empMasterId));
+    public GenericResponseEntity getEmployeeAppointments(String empMasterId) {
+        EmployeeMaster employeeMaster = empMasterRespository.findByEmployeeId(empMasterId);
         List<Person> personList = new ArrayList<>();
         if(!ObjectUtils.isEmpty(employeeMaster)) {
             personList  = personRepository.findPersonByEmpMasterId(employeeMaster.getEmpMasterId());
         }
         EmployeeScheduledAppointmentVO employeeScheduledAppointmentVO = new EmployeeScheduledAppointmentVO();
-        employeeScheduledAppointmentVO.setEmpMasterId(empMasterId);
+        employeeScheduledAppointmentVO.setEmpMasterId(employeeMaster.getEmpMasterId());
         List<AppointmentVO> appointmentVoList = new ArrayList<>();
 
         List<Lov> lovList = lovRepository.getLovByLovtypeIdIsActive(LOV_TYPE_STATUS, Boolean.TRUE);

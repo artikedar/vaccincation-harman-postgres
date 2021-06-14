@@ -69,11 +69,6 @@ INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	V
 INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),4,18,18,'2:45-3:00',true);
 INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),4,19,19,'3:00-3:15',true);
 INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),4,20,20,'3:15-3:30',true);
-INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),4,21,21,'3:30-3:45',true);
-INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),4,22,22,'3:45-4:00',true);
-INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),4,23,23,'4:00-4:15',true);
-INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),4,24,24,'4:15-4:30',true);
-INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),4,25,25,'4:30-4:45',true);
 
 INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),5,1,1,'HR',true);
 INSERT INTO covid.lov(lovid, lovtypeid, lovsequence, valueid, value, isactive)	VALUES (nextval('covid.lov_seq'),5,2,2,'Engineer',true);

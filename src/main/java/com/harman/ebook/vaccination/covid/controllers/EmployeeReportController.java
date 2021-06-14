@@ -2,6 +2,7 @@ package com.harman.ebook.vaccination.covid.controllers;
 
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.service.EmployeeReportService;
+import com.harman.ebook.vaccination.covid.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class EmployeeReportController {
 
     @Autowired
     private EmployeeReportService employeeReportService;
+
+    @Autowired
+    EmployeeService empService;
 
     /**
      *
@@ -41,5 +45,15 @@ public class EmployeeReportController {
                                                    @RequestParam(name = "appointmentstatus") Short appointmentstatus,
                                                    HttpServletResponse response) throws IOException, ParseException {
          employeeReportService.getEmployeeReport(location, bookingDate, appointmentstatus, response);
+    }
+
+    @GetMapping(value = "/api/vaccine/report/employee/dependents")
+    public GenericResponseEntity getEmployeeDependents(@RequestParam(name = "empId")String empId) {
+        return empService.getEmployeeDependents(empId);
+    }
+
+    @GetMapping(value = "/api/vaccine/report/employee/appointments")
+    public GenericResponseEntity getEmployeeAppointments(@RequestParam(name = "empId")String empId) {
+        return empService.getEmployeeAppointments(empId);
     }
 }

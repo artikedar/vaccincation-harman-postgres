@@ -33,6 +33,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -96,10 +97,13 @@ public class EmployeeReportService {
             personCsvVO.setLocationName(locationName);
             personCsvVO.setDateOfVaccination(bookingDate);
             personCsvVoList.add(personCsvVO);
+            Person person = personRespository.findPersonByPersonId(personAppointmentVO.getPersonId());
+            personCsvVO.setManipalId(person.getManipalid());
+            personCsvVO.setCowinId(person.getCowinid());
         }
         String fileName = "harman-vaccination-report-" + System.currentTimeMillis() +".csv";
         FileWriter writer = new FileWriter("D:\\temp\\" + fileName);
-        String str = "PersonId,EmpMasterId,EmpVaccAppId,FullName,SlotNo,SlotName,LocationName,DateOfVaccination";
+        String str = "PersonId,EmpMasterId,EmpVaccAppId,ManipalId,CowinId,FullName,SlotNo,SlotName,LocationName,DateOfVaccination";
         writer.write(str);
         writer.write("\n");
         personCsvVoList.forEach(vo -> {
@@ -138,6 +142,8 @@ public class EmployeeReportService {
             if (!ObjectUtils.isEmpty(lov)) {
                 personVO.setSlotName(lov.getValue());
             }
+            personVO.setManipalId(person.getManipalid());
+            personVO.setCowinId(person.getCowinid());
             personVoList.add(personVO);
         }
         return personVoList;

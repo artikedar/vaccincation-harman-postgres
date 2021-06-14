@@ -18,5 +18,4 @@ public interface PersonRespository extends JpaRepository<Person, Integer> {
 	List<Person> findPersonByEmpMasterId(Integer empId);
 	List<Person> findPersonByEmpMasterIdOrderByPersonId(Integer empId);
 	Person findPersonByPersonId(Integer personId);
-
 }

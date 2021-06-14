@@ -29,4 +29,10 @@ public class PersonAppointmentVO {
 
     @JsonProperty("empVaccAppId")
     private Integer empVaccAppId;
+
+    @JsonProperty("manipalId")
+    private String manipalId;
+
+    @JsonProperty("cowinId")
+    private String cowinId;
 }

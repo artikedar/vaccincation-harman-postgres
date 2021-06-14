@@ -7,12 +7,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 
 @JsonPropertyOrder({
         "personId",
         "empMasterId",
         "empVaccAppId",
+        "manipalId",
+        "cowinId",
         "fullName",
         "slotNo",
         "slotName",
@@ -34,6 +37,12 @@ public class PersonCsvVO implements Serializable {
     @JsonProperty("empVaccAppId")
     private Integer empVaccAppId;
 
+    @JsonProperty("manipalId")
+    private String manipalId;
+
+    @JsonProperty("cowinId")
+    private String cowinId;
+
     @JsonProperty("fullName")
     private String fullName;
 
@@ -51,13 +60,15 @@ public class PersonCsvVO implements Serializable {
 
     @Override
     public String toString() {
-        return  personId + ","
-                 + empMasterId + ","
+        return personId + ","
+                + empMasterId + ","
                 + empVaccAppId + ","
-                 + fullName + ","
-                + slotNo + ","+
-                 slotName +  ","+
-                 locationName +  ","
+                + manipalId + ","
+                + cowinId + ","
+                + fullName + ","
+                + slotNo + ","
+                + slotName + ","
+                + locationName + ","
                 + dateOfVaccination;
 
     }

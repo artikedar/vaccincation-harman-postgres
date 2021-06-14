@@ -25,6 +25,7 @@ SET row_security = off;
 --
 --CREATE USER vacadmin WITH PASSWORD 'HarmanV@#12';
 --CREATE DATABASE  harmanvac with owner = vacadmin;
+DROP SCHEMA IF EXISTS covid cascade;
 
 CREATE SCHEMA covid AUTHORIZATION vacadmin;
 

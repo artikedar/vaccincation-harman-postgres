@@ -193,9 +193,9 @@ public class EmployeeService {
         List<Lov> lovLocationList = lovRepository.getLovByLovtypeIdIsActive(LOV_TYPE_LOCATION, Boolean.TRUE);
         for(Person person : personList) {
             AppointmentVO appointmentVO = new AppointmentVO();
-            appointmentVO.setCowinId(person.getCowinid());
+            appointmentVO.setCowinid(person.getCowinid());
             appointmentVO.setFullName(person.getFullName());
-            appointmentVO.setManipalId(person.getManipalid());
+            appointmentVO.setManipalid(person.getManipalid());
             appointmentVO.setPersonId(person.getPersonId());
             EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo = employeeVaccSchInfoRepository.findEmployeeVaccAppointmentInfoByPersonIdAndStatus(person.getPersonId(), LOV_APP_STATUS_BOOKED);
             appointmentVO.setEmpVaccAppId(employeeVaccAppointmentInfo.getEmpVaccAppId());

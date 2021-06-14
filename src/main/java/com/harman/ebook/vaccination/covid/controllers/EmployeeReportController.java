@@ -22,9 +22,6 @@ public class EmployeeReportController {
     @Autowired
     private EmployeeReportService employeeReportService;
 
-    @Autowired
-    EmployeeService empService;
-
     /**
      *
      * @param location
@@ -49,11 +46,11 @@ public class EmployeeReportController {
 
     @GetMapping(value = "/api/vaccine/report/employee/dependents")
     public GenericResponseEntity getEmployeeDependents(@RequestParam(name = "empId")String empId) {
-        return empService.getEmployeeDependents(empId);
+        return employeeReportService.getEmployeeDependents(empId);
     }
 
     @GetMapping(value = "/api/vaccine/report/employee/appointments")
-    public GenericResponseEntity getEmployeeAppointments(@RequestParam(name = "empId")String empId) {
-        return empService.getEmployeeAppointments(empId);
+    public GenericResponseEntity getEmployeeAppointments(@RequestParam(name = "empId") String empId) {
+        return employeeReportService.getEmployeeAppointments(empId);
     }
 }

@@ -21,10 +21,10 @@ public class AppointmentVO {
     private String fullName;
 
     @JsonProperty("manipalId")
-    private String manipalId;
+    private String manipalid;
 
     @JsonProperty("cowinId")
-    private String cowinId;
+    private String cowinid;
 
     @JsonProperty("dateOfVaccination")
     private String dateOfVaccination;

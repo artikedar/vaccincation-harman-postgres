@@ -1,19 +1,7 @@
 package com.harman.ebook.vaccination.covid.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema.Builder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
-import com.harman.ebook.vaccination.covid.domain.EmployeeReportVO;
-import com.harman.ebook.vaccination.covid.domain.PersonAppointmentVO;
-import com.harman.ebook.vaccination.covid.domain.PersonCsvVO;
+import com.harman.ebook.vaccination.covid.domain.*;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
 import com.harman.ebook.vaccination.covid.entity.Lov;
 import com.harman.ebook.vaccination.covid.entity.Person;
@@ -24,29 +12,22 @@ import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_TYPE_LOCATION;
 import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_TYPE_STATUS;
@@ -56,7 +37,7 @@ import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_TYPE
 public class EmployeeReportService {
 
     @Autowired
-    private EmployeeVaccAppointmentInfoRepository employeeVaccSchInfoRepository;
+    private EmployeeVaccAppointmentInfoRepository employeeVaccAppointmentInfoRepository;
 
     @Autowired
     private PersonRespository personRespository;
@@ -66,6 +47,9 @@ public class EmployeeReportService {
 
     @Autowired
     private LovRepository lovRepository;
+
+    @Autowired
+    private PersonRespository personRepository;
 
     public GenericResponseEntity getEmployeeReport(Short location, String bookingDate, Short appointmentstatus) throws IOException {
         Date dateOfVaccination = DateUtil.getDate(bookingDate);
@@ -101,31 +85,31 @@ public class EmployeeReportService {
             personCsvVO.setManipalId(person.getManipalid());
             personCsvVO.setCowinId(person.getCowinid());
         }
-        String fileName = "harman-vaccination-report-" + System.currentTimeMillis() +".csv";
+        String fileName = "harman-vaccination-report-" + System.currentTimeMillis() + ".csv";
         FileWriter writer = new FileWriter("D:\\temp\\" + fileName);
         String str = "PersonId,EmpMasterId,EmpVaccAppId,ManipalId,CowinId,FullName,SlotNo,SlotName,LocationName,DateOfVaccination";
         writer.write(str);
         writer.write("\n");
         personCsvVoList.forEach(vo -> {
-                    try {
-                        writer.write(vo.toString());
-                        writer.write("\n");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+            try {
+                writer.write(vo.toString());
+                writer.write("\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         writer.close();
 
         FileInputStream fileInputStream = new FileInputStream("D:\\temp\\" + fileName);
         response.setContentType("text/plain");
-        response.setHeader("Content-Disposition", "attachment; filename="+fileName);
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
         response.getWriter().print(IOUtils.toString(fileInputStream, StandardCharsets.UTF_8));
 //        return appResponseService.genSuccessResponse(VaccinationConstants.STATUS_FLAG_SUCCESS, response);
     }
 
     private List<PersonAppointmentVO> getPersonVoList(Short location, String bookingDate, Short appointmentstatus) {
         Date dateOfVaccination = DateUtil.getDate(bookingDate);
-        List<EmployeeVaccAppointmentInfo> employeeVaccAppointmentInfoList = employeeVaccSchInfoRepository.findEmployeeVaccAppointmentInfosByLocationAndDateOfVaccinationAndStatus(location, dateOfVaccination, appointmentstatus);
+        List<EmployeeVaccAppointmentInfo> employeeVaccAppointmentInfoList = employeeVaccAppointmentInfoRepository.findEmployeeVaccAppointmentInfosByLocationAndDateOfVaccinationAndStatus(location, dateOfVaccination, appointmentstatus);
 
         List<PersonAppointmentVO> personVoList = new ArrayList<>();
         List<Lov> lovList = lovRepository.getLovByLovtypeIdIsActive(LOV_TYPE_STATUS, Boolean.TRUE);
@@ -147,5 +131,42 @@ public class EmployeeReportService {
             personVoList.add(personVO);
         }
         return personVoList;
+    }
+
+    /**
+     *
+     * @param empId
+     * @return
+     */
+    public GenericResponseEntity getEmployeeDependents(String empId) {
+        List<Person> personList = personRepository.findPersonByEmployeeId(empId);
+        if(CollectionUtils.isEmpty(personList)) {
+            return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, "No dependents found");
+        }
+
+        List<DependentVO> dependentVOList = new ArrayList<>();
+        for(Person person : personList) {
+            DependentVO dependentVO = new DependentVO();
+            BeanUtils.copyProperties(person,dependentVO);
+            dependentVOList.add(dependentVO);
+        }
+        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, dependentVOList);
+    }
+
+    public GenericResponseEntity getEmployeeAppointments(String empId) {
+        List<EmployeeVaccAppointmentInfo> appointmentByEmployeeIdLst = employeeVaccAppointmentInfoRepository.getAppointmentByEmployeeId(empId);
+        List<AppointmentVO> empAppointmentLst = new ArrayList<>(1);
+        for (EmployeeVaccAppointmentInfo appointmentInfo : appointmentByEmployeeIdLst) {
+            AppointmentVO appointmentVO = new AppointmentVO();
+            Person currPerson = appointmentInfo.getPerson();
+            BeanUtils.copyProperties(appointmentInfo, appointmentVO);
+            appointmentVO.setPersonId(currPerson.getPersonId());
+            appointmentVO.setFullName(currPerson.getFullName());
+            appointmentVO.setManipalid(currPerson.getManipalid());
+            appointmentVO.setCowinid(currPerson.getCowinid());
+            appointmentVO.setDateOfVaccination(DateUtil.getDateString(appointmentInfo.getDateOfVaccination()));
+            empAppointmentLst.add(appointmentVO);
+        }
+        return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, empAppointmentLst);
     }
 }

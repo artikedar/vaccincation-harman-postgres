@@ -9,8 +9,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import com.harman.ebook.vaccination.covid.entity.VaccineInventory;
+import org.springframework.stereotype.Repository;
 
-@RepositoryRestResource(collectionResourceRel = "vaccineInventory", path = "vaccine_inventory")
+@Repository
 public interface VaccineInventoryRepository extends JpaRepository<VaccineInventory, Integer>{
 
 	@Query("select vacInv from VaccineInventory vacInv where vacInv.location = :location and vacInv.dateOfAvailability >= :fromDate and vacInv.dateOfAvailability <= :tillDate and vacInv.isactive = :isActive order by vacInv.dateOfAvailability")

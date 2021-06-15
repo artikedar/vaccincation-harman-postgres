@@ -13,8 +13,11 @@ import com.harman.ebook.vaccination.covid.repository.VaccineInventoryRepository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
+import com.harman.ebook.vaccination.covid.util.VacUtils;
+import java.io.File;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.parser.ParseException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_TYPE_LOCATION;
-import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_TYPE_STATUS;
+import static com.harman.ebook.vaccination.covid.constants.LovConstants.LOV_TYPE_SLOTS;
 
 @Service
 @Slf4j
@@ -91,6 +94,9 @@ public class EmployeeReportService {
             personCsvVO.setCowinId(person.getCowinid());
         }
         String fileName = "harman-vaccination-report-" + System.currentTimeMillis() + ".csv";
+        String filePath = "\\temp\\";
+        FileUtils.forceMkdirParent(new File(filePath));
+
         FileWriter writer = new FileWriter("D:\\temp\\" + fileName);
         String str = "PersonId,EmpMasterId,EmpVaccAppId,ManipalId,CowinId,FullName,SlotNo,SlotName,LocationName,DateOfVaccination";
         writer.write(str);
@@ -114,10 +120,10 @@ public class EmployeeReportService {
 
     private List<PersonAppointmentVO> getPersonVoList(Short location, String bookingDate, Short appointmentstatus) {
         Date dateOfVaccination = DateUtil.getDate(bookingDate);
-        List<EmployeeVaccAppointmentInfo> employeeVaccAppointmentInfoList = employeeVaccAppointmentInfoRepository.findEmployeeVaccAppointmentInfosByLocationAndDateOfVaccinationAndStatus(location, dateOfVaccination, appointmentstatus);
+        List<EmployeeVaccAppointmentInfo> employeeVaccAppointmentInfoList = employeeVaccAppointmentInfoRepository.findEmployeeVaccAppointmentInfosByLocationAndDateOfVaccinationAndStatusOrderBySlotNoAscEmpVaccAppIdAsc(location, dateOfVaccination, appointmentstatus);
 
         List<PersonAppointmentVO> personVoList = new ArrayList<>();
-        List<Lov> lovList = lovRepository.getLovByLovtypeIdIsActive(LOV_TYPE_STATUS, Boolean.TRUE);
+        List<Lov> lovList = lovRepository.getLovByLovtypeIdIsActive(LOV_TYPE_SLOTS, Boolean.TRUE);
 
         for (EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo : employeeVaccAppointmentInfoList) {
             Person person = personRespository.findPersonByPersonId(employeeVaccAppointmentInfo.getPersonId());
@@ -161,6 +167,9 @@ public class EmployeeReportService {
     public GenericResponseEntity getEmployeeAppointments(String empId) {
         List<EmployeeVaccAppointmentInfo> appointmentByEmployeeIdLst = employeeVaccAppointmentInfoRepository.getAppointmentByEmployeeId(empId);
         List<AppointmentVO> empAppointmentLst = new ArrayList<>(1);
+        List<Lov> lovSlots = lovRepository.getLovByLovtypeIdIsActive(LOV_TYPE_SLOTS, Boolean.TRUE);
+        List<Lov> lovLocation = lovRepository.getLovByLovtypeIdIsActive(LOV_TYPE_LOCATION, Boolean.TRUE);
+
         for (EmployeeVaccAppointmentInfo appointmentInfo : appointmentByEmployeeIdLst) {
             AppointmentVO appointmentVO = new AppointmentVO();
             Person currPerson = appointmentInfo.getPerson();
@@ -169,6 +178,9 @@ public class EmployeeReportService {
             appointmentVO.setFullName(currPerson.getFullName());
             appointmentVO.setManipalid(currPerson.getManipalid());
             appointmentVO.setCowinid(currPerson.getCowinid());
+            appointmentVO.setSlotName(VacUtils.getLovValue(lovSlots,appointmentInfo.getSlotNo()));
+            appointmentVO.setLocationName(VacUtils.getLovValue(lovLocation,appointmentInfo.getLocation()));
+
             appointmentVO.setDateOfVaccination(DateUtil.getDateString(appointmentInfo.getDateOfVaccination()));
             empAppointmentLst.add(appointmentVO);
         }

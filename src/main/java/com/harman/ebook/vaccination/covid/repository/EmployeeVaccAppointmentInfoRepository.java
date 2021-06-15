@@ -20,10 +20,13 @@ public interface EmployeeVaccAppointmentInfoRepository extends JpaRepository<Emp
 
     @Query(value = "SELECT empAp FROM EmployeeVaccAppointmentInfo empAp " +
             "JOIN EmployeeMaster empM ON empM.empMasterId = empAp.person.empMasterId " +
-            "WHERE empM.employeeId = :empId")
+            "WHERE empM.employeeId = :empId "
+        + " order by empAp.personId,empAp.dateOfVaccination")
     List<EmployeeVaccAppointmentInfo> getAppointmentByEmployeeId(@Param("empId") String empId);
 
     EmployeeVaccAppointmentInfo findEmployeeVaccAppointmentInfoByPersonIdAndStatus(Integer personId, Short status);
 
     List<EmployeeVaccAppointmentInfo> findEmployeeVaccAppointmentInfosByLocationAndDateOfVaccinationAndStatus(Short location, Date bookingDate, Short status);
+    List<EmployeeVaccAppointmentInfo> findEmployeeVaccAppointmentInfosByLocationAndDateOfVaccinationAndStatusOrderBySlotNoAscEmpVaccAppIdAsc(Short location, Date bookingDate, Short status);
+
 }

@@ -53,4 +53,9 @@ public class EmployeeReportController {
     public GenericResponseEntity getEmployeeAppointments(@RequestParam(name = "empId") String empId) {
         return employeeReportService.getEmployeeAppointments(empId);
     }
+
+    @GetMapping(value = "/api/vaccine/report/vaccineinventory")
+    public GenericResponseEntity getVaccineInventory(@RequestParam(name = "location") Short location) {
+        return employeeReportService.getLocationVaccineInventory(location);
+    }
 }

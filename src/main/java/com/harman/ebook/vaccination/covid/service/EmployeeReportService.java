@@ -5,9 +5,11 @@ import com.harman.ebook.vaccination.covid.domain.*;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
 import com.harman.ebook.vaccination.covid.entity.Lov;
 import com.harman.ebook.vaccination.covid.entity.Person;
+import com.harman.ebook.vaccination.covid.entity.VaccineInventory;
 import com.harman.ebook.vaccination.covid.repository.EmployeeVaccAppointmentInfoRepository;
 import com.harman.ebook.vaccination.covid.repository.LovRepository;
 import com.harman.ebook.vaccination.covid.repository.PersonRespository;
+import com.harman.ebook.vaccination.covid.repository.VaccineInventoryRepository;
 import com.harman.ebook.vaccination.covid.response.ApplicationResponseService;
 import com.harman.ebook.vaccination.covid.response.GenericResponseEntity;
 import com.harman.ebook.vaccination.covid.util.DateUtil;
@@ -50,6 +52,9 @@ public class EmployeeReportService {
 
     @Autowired
     private PersonRespository personRepository;
+
+    @Autowired
+    VaccineInventoryRepository vacRepos;
 
     public GenericResponseEntity getEmployeeReport(Short location, String bookingDate, Short appointmentstatus) throws IOException {
         Date dateOfVaccination = DateUtil.getDate(bookingDate);
@@ -169,4 +174,14 @@ public class EmployeeReportService {
         }
         return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, empAppointmentLst);
     }
+
+    /**
+     *
+     * @param location
+     * @return
+     */
+  public GenericResponseEntity getLocationVaccineInventory(Short location) {
+      List<VaccineInventory> vacInv =   vacRepos.findByLocation(location);
+      return appResponseService.genSuccessResponse(VaccinationConstants.RECORD_FOUNDS, vacInv);
+  }
 }

@@ -37,4 +37,13 @@ public class VaccineScheduleController {
         @RequestParam(name = "empMasterId") Integer empMasterId) {
         return vaccineScheduleService.cancelScheduledVaccine(empVaccAppId,empMasterId);
     }
+
+    /**
+     * Cancels the appointment for vaccination
+     * @return
+     */
+    @PostMapping("/api/hr/appointment/cancel")
+    public GenericResponseEntity cancelScheduledVaccine(@RequestParam(name = "empVaccAppId") Integer empVaccAppId) {
+        return vaccineScheduleService.hrCancelHRScheduledVaccine(empVaccAppId);
+    }
 }

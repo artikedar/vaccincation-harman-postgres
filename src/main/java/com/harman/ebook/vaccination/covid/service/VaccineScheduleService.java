@@ -185,4 +185,18 @@ public class VaccineScheduleService {
     private Boolean checkValidBookingCount(AppointmentRequest req) {
         return vaccineInventoryService.checkValidBookingCount(req);
     }
+
+
+    /**
+     *
+     * @param appointmentId
+     * @return
+     */
+    public GenericResponseEntity hrCancelHRScheduledVaccine(Integer appointmentId) {
+        boolean isCancel = cancelVaccine(appointmentId);
+        if(!isCancel){
+            return applicationResponseService.genFailureResponse("Appointment not valid to cancel ","");
+        }
+        return applicationResponseService.genSuccessResponse("Appointment cancelled by HR ","");
+    }
 }

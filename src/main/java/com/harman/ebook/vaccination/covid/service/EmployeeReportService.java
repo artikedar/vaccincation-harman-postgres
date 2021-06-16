@@ -2,10 +2,12 @@ package com.harman.ebook.vaccination.covid.service;
 
 import com.harman.ebook.vaccination.covid.constants.VaccinationConstants;
 import com.harman.ebook.vaccination.covid.domain.*;
+import com.harman.ebook.vaccination.covid.entity.EmployeeMaster;
 import com.harman.ebook.vaccination.covid.entity.EmployeeVaccAppointmentInfo;
 import com.harman.ebook.vaccination.covid.entity.Lov;
 import com.harman.ebook.vaccination.covid.entity.Person;
 import com.harman.ebook.vaccination.covid.entity.VaccineInventory;
+import com.harman.ebook.vaccination.covid.repository.EmpMasterRespository;
 import com.harman.ebook.vaccination.covid.repository.EmployeeVaccAppointmentInfoRepository;
 import com.harman.ebook.vaccination.covid.repository.LovRepository;
 import com.harman.ebook.vaccination.covid.repository.PersonRespository;
@@ -58,6 +60,9 @@ public class EmployeeReportService {
 
     @Autowired
     VaccineInventoryRepository vacRepos;
+
+    @Autowired
+    EmpMasterRespository empMasterRespository;
 
     public GenericResponseEntity getEmployeeReport(Short location, String bookingDate, Short appointmentstatus) throws IOException {
         Date dateOfVaccination = DateUtil.getDate(bookingDate);
@@ -127,11 +132,15 @@ public class EmployeeReportService {
 
         for (EmployeeVaccAppointmentInfo employeeVaccAppointmentInfo : employeeVaccAppointmentInfoList) {
             Person person = personRespository.findPersonByPersonId(employeeVaccAppointmentInfo.getPersonId());
+            EmployeeMaster employeeMaster = empMasterRespository.findById(person.getEmpMasterId()).orElse(null);
+
             PersonAppointmentVO personVO = new PersonAppointmentVO();
             personVO.setPersonId(employeeVaccAppointmentInfo.getPersonId());
             personVO.setFullName(person.getFullName());
             personVO.setSlotNo(employeeVaccAppointmentInfo.getSlotNo());
-            personVO.setEmpMasterId(person.getEmpMasterId());
+            if(!ObjectUtils.isEmpty(employeeMaster)) {
+                personVO.setEmployeeId(employeeMaster.getEmployeeId());
+            }
             personVO.setEmpVaccAppId(employeeVaccAppointmentInfo.getEmpVaccAppId());
             Lov lov = lovList.stream().filter(l -> l.getValueid() == employeeVaccAppointmentInfo.getSlotNo().intValue()).findFirst().orElse(null);
             if (!ObjectUtils.isEmpty(lov)) {

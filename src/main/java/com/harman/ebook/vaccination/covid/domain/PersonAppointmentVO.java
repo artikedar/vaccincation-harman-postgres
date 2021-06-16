@@ -24,6 +24,9 @@ public class PersonAppointmentVO {
     @JsonProperty("empMasterId")
     private Integer empMasterId;
 
+    @JsonProperty("employeeId")
+    private String employeeId;
+
     @JsonProperty("slotName")
     private String slotName;
 
